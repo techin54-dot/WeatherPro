@@ -15,6 +15,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -48,72 +49,119 @@
       --sidebar:#0b1220;
     }
 
-    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-    html{height:100%;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+    *{
+      box-sizing:border-box;
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    html{
+      height:100%;
+      -webkit-text-size-adjust:100%;
+      text-size-adjust:100%;
+    }
+
     body{
-      min-height:100dvh;
+      height:100%;
       margin:0;
-      overflow-x:hidden;
+      overflow:hidden;
       color:var(--ink);
       font-family:'Prompt','Inter',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
       background:
-        radial-gradient(circle at top left,rgba(37,99,235,.18),transparent 34rem),
+        radial-gradient(circle at top left,rgba(37,99,235,.16),transparent 34rem),
         radial-gradient(circle at bottom right,rgba(14,165,233,.13),transparent 30rem),
         var(--bg);
-      overscroll-behavior-y:none;
+      overscroll-behavior:none;
     }
 
-    button,input,select,textarea{font-family:inherit;font-size:16px}
-    button{min-height:44px;touch-action:manipulation;cursor:pointer}
-    input{-webkit-appearance:none;appearance:none}
+    button,
+    input,
+    select,
+    textarea{
+      font-family:inherit;
+      font-size:16px;
+    }
 
-    .app-shell{min-height:100dvh;display:flex;padding-left:var(--safe-left);padding-right:var(--safe-right)}
-    .desktop-sidebar{width:18rem;background:linear-gradient(180deg,#0b1220 0%,#08101f 100%)}
-    .main-area{min-width:0;flex:1;display:flex;flex-direction:column;min-height:100dvh}
+    button{
+      min-height:44px;
+      touch-action:manipulation;
+      cursor:pointer;
+      border:0;
+    }
+
+    input{
+      -webkit-appearance:none;
+      appearance:none;
+    }
+
+    .app-shell{
+      width:100%;
+      height:100dvh;
+      display:flex;
+      overflow:hidden;
+      padding-left:var(--safe-left);
+      padding-right:var(--safe-right);
+    }
+
+    .desktop-sidebar{
+      width:18rem;
+      flex:0 0 18rem;
+      background:linear-gradient(180deg,#0b1220 0%,#08101f 100%);
+      overflow-y:auto;
+      -webkit-overflow-scrolling:touch;
+    }
+
+    .main-area{
+      flex:1;
+      min-width:0;
+      height:100dvh;
+      display:flex;
+      flex-direction:column;
+      overflow:hidden;
+    }
 
     .top-header{
-      position:sticky;
-      top:0;
+      position:relative;
       z-index:30;
-      min-height:calc(64px + var(--safe-top));
+      min-height:calc(66px + var(--safe-top));
       padding-top:var(--safe-top);
-      background:rgba(255,255,255,.88);
+      background:rgba(255,255,255,.90);
       backdrop-filter:blur(18px);
       -webkit-backdrop-filter:blur(18px);
-      border-bottom:1px solid rgba(226,232,240,.9);
+      border-bottom:1px solid rgba(226,232,240,.92);
     }
 
     .content-scroll{
       flex:1;
+      min-height:0;
       overflow-y:auto;
+      overflow-x:hidden;
       -webkit-overflow-scrolling:touch;
-      padding-bottom:calc(96px + var(--safe-bottom));
+      padding:24px;
+      padding-bottom:calc(24px + var(--safe-bottom));
     }
 
-    .hero-gradient{background:linear-gradient(135deg,rgba(37,99,235,.96) 0%,rgba(14,165,233,.92) 55%,rgba(6,182,212,.90) 100%)}
-    .glass-card{background:rgba(255,255,255,.88);border:1px solid rgba(226,232,240,.9);box-shadow:0 18px 45px rgba(15,23,42,.07);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
-    .soft-card{background:#fff;border:1px solid rgba(226,232,240,.92);box-shadow:0 14px 34px rgba(15,23,42,.055)}
-    .radar-legend{background:linear-gradient(to right,#22c55e,#eab308,#f97316,#ef4444)}
-    .compass-dial{background:radial-gradient(circle,#ffffff 65%,#f1f5f9 100%)}
-
-    .no-scrollbar::-webkit-scrollbar{display:none}
-    .no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}
-
-    .search-input{
-      min-height:46px;
-      width:100%;
-      border:1px solid #dbe3ee;
-      border-radius:999px;
-      background:#f8fafc;
-      padding:.72rem 1rem .72rem 2.55rem;
-      outline:none;
-      transition:.18s ease;
+    .view-content.hidden{
+      display:none!important;
     }
-    .search-input:focus{border-color:#2563eb;box-shadow:0 0 0 4px rgba(37,99,235,.13);background:#fff}
 
-    .nav-btn.active{background:#2563eb;color:#fff;box-shadow:0 10px 22px rgba(37,99,235,.28)}
+    .hero-gradient{
+      background:linear-gradient(135deg,rgba(37,99,235,.97) 0%,rgba(14,165,233,.93) 55%,rgba(6,182,212,.90) 100%);
+    }
+
+    .soft-card{
+      background:#fff;
+      border:1px solid rgba(226,232,240,.94);
+      box-shadow:0 14px 34px rgba(15,23,42,.055);
+    }
+
+    .nav-btn.active{
+      background:#2563eb;
+      color:#fff;
+      box-shadow:0 10px 22px rgba(37,99,235,.28);
+    }
+
     .nav-btn:not(.active){color:#94a3b8}
-    .nav-btn:not(.active):hover{background:rgba(30,41,59,.7);color:#fff}
+    .nav-btn:not(.active):hover{background:rgba(30,41,59,.70);color:#fff}
 
     .bottom-nav{
       position:fixed;
@@ -132,44 +180,132 @@
       padding:8px;
       gap:4px;
     }
-    .bottom-nav button{flex:1;min-width:0;border-radius:20px;color:#cbd5e1;font-size:11px;font-weight:700;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;transition:.18s ease}
-    .bottom-nav button i{font-size:18px}.bottom-nav button.active{background:#2563eb;color:#fff}
 
-    .map-box{min-height:320px}.map-full{height:clamp(420px,62dvh,680px)}
-    .leaflet-container{font-family:'Prompt',sans-serif;background:#e2e8f0}
-    .leaflet-control-attribution{font-size:10px!important}
+    .bottom-nav button{
+      flex:1;
+      min-width:0;
+      border-radius:20px;
+      color:#cbd5e1;
+      font-size:11px;
+      font-weight:700;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:4px;
+      transition:.18s ease;
+      background:transparent;
+    }
+
+    .bottom-nav button i{font-size:18px}
+    .bottom-nav button.active{background:#2563eb;color:#fff}
+
+    .search-input{
+      min-height:46px;
+      width:100%;
+      border:1px solid #dbe3ee;
+      border-radius:999px;
+      background:#f8fafc;
+      padding:.72rem 1rem .72rem 2.55rem;
+      outline:none;
+      transition:.18s ease;
+    }
+
+    .search-input:focus{
+      border-color:#2563eb;
+      box-shadow:0 0 0 4px rgba(37,99,235,.13);
+      background:#fff;
+    }
+
+    .no-scrollbar::-webkit-scrollbar{display:none}
+    .no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}
 
     .weather-icon-shadow{filter:drop-shadow(0 10px 20px rgba(0,0,0,.16))}
+    .radar-legend{background:linear-gradient(to right,#22c55e,#eab308,#f97316,#ef4444)}
+    .compass-dial{background:radial-gradient(circle,#ffffff 65%,#f1f5f9 100%)}
+
+    .map-preview{
+      min-height:300px;
+    }
+
+    .map-full{
+      height:clamp(420px,62dvh,680px);
+    }
+
+    .leaflet-container{
+      font-family:'Prompt',sans-serif;
+      background:#e2e8f0;
+    }
+
+    .leaflet-control-attribution{font-size:10px!important}
 
     .toast{
-      position:fixed;z-index:100;left:50%;top:calc(14px + var(--safe-top));transform:translateX(-50%) translateY(-8px);
-      max-width:min(92vw,520px);border-radius:18px;padding:12px 16px;color:#fff;font-size:14px;font-weight:700;
-      box-shadow:0 16px 38px rgba(15,23,42,.28);opacity:0;pointer-events:none;transition:.24s ease;display:flex;align-items:center;gap:10px
+      position:fixed;
+      z-index:100;
+      left:50%;
+      top:calc(14px + var(--safe-top));
+      transform:translateX(-50%) translateY(-8px);
+      max-width:min(92vw,520px);
+      border-radius:18px;
+      padding:12px 16px;
+      color:#fff;
+      font-size:14px;
+      font-weight:700;
+      box-shadow:0 16px 38px rgba(15,23,42,.28);
+      opacity:0;
+      pointer-events:none;
+      transition:.24s ease;
+      display:flex;
+      align-items:center;
+      gap:10px;
     }
-    .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+    .toast.show{
+      opacity:1;
+      transform:translateX(-50%) translateY(0);
+    }
 
     @media(max-width:1023px){
-      .desktop-sidebar{display:none}.bottom-nav{display:flex}.top-header{min-height:calc(68px + var(--safe-top))}
-      .content-scroll{padding:14px 14px calc(98px + var(--safe-bottom))}
+      .desktop-sidebar{display:none!important}
+      .bottom-nav{display:flex}
+      .top-header{min-height:calc(70px + var(--safe-top))}
+      .content-scroll{
+        padding:14px;
+        padding-bottom:calc(98px + var(--safe-bottom));
+      }
     }
-    @media(min-width:1024px){.content-scroll{padding:24px}}
+
     @media(max-width:640px){
-      .hero-temp{font-size:4.8rem;line-height:.95}.hero-title{font-size:1.45rem}.hero-card{padding:1.25rem}.top-header{padding-left:12px;padding-right:12px}
-      .search-input{min-height:44px}.map-box{min-height:280px}.map-full{height:calc(100dvh - 190px)}
+      .hero-temp{font-size:4.7rem;line-height:.95}
+      .hero-title{font-size:1.45rem}
+      .hero-card{padding:1.25rem}
+      .top-header{padding-left:12px;padding-right:12px}
+      .search-input{min-height:44px}
+      .map-preview{min-height:280px}
+      .map-full{height:calc(100dvh - 190px)}
     }
   </style>
 </head>
 
 <body>
-  <div id="toast" class="toast bg-blue-600"><i class="fa-solid fa-circle-info"></i><span id="toastText">ข้อความแจ้งเตือน</span></div>
+  <div id="toast" class="toast bg-blue-600">
+    <i class="fa-solid fa-circle-info"></i>
+    <span id="toastText">ข้อความแจ้งเตือน</span>
+  </div>
 
   <div class="app-shell">
     <aside class="desktop-sidebar text-slate-400 flex-col justify-between shrink-0 hidden lg:flex border-r border-slate-800/50">
       <div>
         <div class="p-6 flex items-center gap-3">
-          <div class="w-11 h-11 bg-blue-600 rounded-2xl flex items-center justify-center text-white text-xl shadow-lg"><i class="fa-solid fa-cloud-sun"></i></div>
-          <div><h1 class="text-white font-extrabold text-xl tracking-tight">WeatherPro</h1><p class="text-[10px] text-slate-500">GAS / Web App Edition</p></div>
+          <div class="w-11 h-11 bg-blue-600 rounded-2xl flex items-center justify-center text-white text-xl shadow-lg">
+            <i class="fa-solid fa-cloud-sun"></i>
+          </div>
+          <div>
+            <h1 class="text-white font-extrabold text-xl tracking-tight">WeatherPro</h1>
+            <p class="text-[10px] text-slate-500">GAS / Web App Edition</p>
+          </div>
         </div>
+
         <nav class="px-4 space-y-1.5">
           <button data-view="overview" onclick="switchView('overview')" class="nav-btn active w-full flex items-center gap-4 px-4 py-3 rounded-xl font-medium transition text-sm"><i class="fa-solid fa-cloud-sun text-lg w-5"></i><span>ภาพรวมวันนี้</span></button>
           <button data-view="hourly" onclick="switchView('hourly')" class="nav-btn w-full flex items-center gap-4 px-4 py-3 rounded-xl transition text-sm"><i class="fa-solid fa-clock text-lg w-5"></i><span>รายชั่วโมง</span></button>
@@ -182,26 +318,52 @@
           <button data-view="settings" onclick="switchView('settings')" class="nav-btn w-full flex items-center gap-4 px-4 py-3 rounded-xl transition text-sm"><i class="fa-solid fa-cog text-lg w-5"></i><span>ตั้งค่า</span></button>
         </nav>
       </div>
+
       <div class="p-5 border-t border-slate-800/80 bg-[#080d19]/60 space-y-4">
-        <div><span class="text-[10px] text-slate-500 block mb-1">ตำแหน่งปัจจุบัน</span><div class="flex items-center gap-2 text-white font-medium text-sm"><i class="fa-solid fa-location-dot text-blue-500"></i><span id="sideLocationName">กำลังระบุพิกัด...</span></div></div>
-        <div class="flex bg-slate-800 p-1 rounded-xl"><button id="btnC" onclick="switchUnit('C')" class="unit-btn flex-1 py-1.5 text-center text-xs font-bold rounded-lg bg-blue-600 text-white transition">°C</button><button id="btnF" onclick="switchUnit('F')" class="unit-btn flex-1 py-1.5 text-center text-xs font-bold rounded-lg text-slate-400 transition">°F</button></div>
-        <div class="text-[10px] text-slate-500 space-y-2"><p id="updateTimeText">อัปเดตล่าสุด: กำลังโหลด</p><button onclick="shareWeather()" class="w-full py-2.5 bg-blue-600/15 hover:bg-blue-600/25 text-blue-400 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition"><i class="fa-solid fa-share-nodes"></i> แชร์สภาพอากาศ</button></div>
+        <div>
+          <span class="text-[10px] text-slate-500 block mb-1">ตำแหน่งปัจจุบัน</span>
+          <div class="flex items-center gap-2 text-white font-medium text-sm">
+            <i class="fa-solid fa-location-dot text-blue-500"></i>
+            <span id="sideLocationName">กำลังระบุพิกัด...</span>
+          </div>
+        </div>
+        <div class="flex bg-slate-800 p-1 rounded-xl">
+          <button id="btnC" onclick="switchUnit('C')" class="unit-btn flex-1 py-1.5 text-center text-xs font-bold rounded-lg bg-blue-600 text-white transition">°C</button>
+          <button id="btnF" onclick="switchUnit('F')" class="unit-btn flex-1 py-1.5 text-center text-xs font-bold rounded-lg text-slate-400 transition">°F</button>
+        </div>
+        <div class="text-[10px] text-slate-500 space-y-2">
+          <p id="updateTimeText">อัปเดตล่าสุด: กำลังโหลด</p>
+          <button onclick="shareWeather()" class="w-full py-2.5 bg-blue-600/15 hover:bg-blue-600/25 text-blue-400 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition">
+            <i class="fa-solid fa-share-nodes"></i> แชร์สภาพอากาศ
+          </button>
+        </div>
       </div>
     </aside>
 
     <div class="main-area">
       <header class="top-header px-4 sm:px-6 flex items-center justify-between gap-3">
         <div class="flex items-center gap-3 min-w-0 lg:hidden">
-          <div class="w-10 h-10 bg-blue-600 rounded-2xl flex items-center justify-center text-white shadow"><i class="fa-solid fa-cloud-sun"></i></div>
-          <div class="min-w-0"><h1 class="font-extrabold text-slate-900 leading-tight">WeatherPro</h1><p class="text-[11px] text-slate-500 truncate" id="mobileLocationName">กำลังระบุพิกัด...</p></div>
+          <div class="w-10 h-10 bg-blue-600 rounded-2xl flex items-center justify-center text-white shadow">
+            <i class="fa-solid fa-cloud-sun"></i>
+          </div>
+          <div class="min-w-0">
+            <h1 class="font-extrabold text-slate-900 leading-tight">WeatherPro</h1>
+            <p class="text-[11px] text-slate-500 truncate" id="mobileLocationName">กำลังระบุพิกัด...</p>
+          </div>
         </div>
+
         <form onsubmit="searchLocation(event)" class="relative flex-1 max-w-2xl lg:max-w-xl ml-auto">
           <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
           <input type="search" id="searchInput" placeholder="ค้นหาสถานที่ เช่น สกลนคร, โตเกียว..." class="search-input" autocomplete="off" />
         </form>
+
         <div class="flex items-center gap-2 shrink-0">
-          <button onclick="getUserLocation()" class="w-11 h-11 rounded-full bg-slate-100 hover:bg-blue-50 text-blue-600 flex items-center justify-center transition" title="ตำแหน่งปัจจุบัน"><i class="fa-solid fa-location-crosshairs"></i></button>
-          <button onclick="shareWeather()" class="hidden sm:flex w-11 h-11 rounded-full bg-slate-100 hover:bg-blue-50 text-slate-600 items-center justify-center transition" title="แชร์"><i class="fa-solid fa-share-nodes"></i></button>
+          <button onclick="getUserLocation()" class="w-11 h-11 rounded-full bg-slate-100 hover:bg-blue-50 text-blue-600 flex items-center justify-center transition" title="ตำแหน่งปัจจุบัน">
+            <i class="fa-solid fa-location-crosshairs"></i>
+          </button>
+          <button onclick="shareWeather()" class="hidden sm:flex w-11 h-11 rounded-full bg-slate-100 hover:bg-blue-50 text-slate-600 items-center justify-center transition" title="แชร์">
+            <i class="fa-solid fa-share-nodes"></i>
+          </button>
         </div>
       </header>
 
@@ -217,11 +379,15 @@
                       <h2 id="cityName" class="hero-title text-2xl sm:text-3xl font-extrabold tracking-tight">กำลังโหลดข้อมูล...</h2>
                       <p id="currentDateText" class="text-sm text-white/80 mt-1">กรุณารอสักครู่</p>
                       <div class="flex items-center mt-6 gap-4">
-                        <div><span id="heroTemp" class="hero-temp text-7xl sm:text-8xl font-black tracking-tighter">-</span><span class="text-3xl sm:text-4xl font-medium ml-1">°<span id="heroUnit">C</span></span></div>
+                        <div>
+                          <span id="heroTemp" class="hero-temp text-7xl sm:text-8xl font-black tracking-tighter">-</span>
+                          <span class="text-3xl sm:text-4xl font-medium ml-1">°<span id="heroUnit">C</span></span>
+                        </div>
                         <i id="heroIcon" class="fa-solid fa-spinner fa-spin text-yellow-300 weather-icon-shadow text-5xl sm:text-6xl animate-pulse"></i>
                       </div>
                       <p id="heroCondition" class="text-lg sm:text-xl font-bold mt-3">กำลังประมวลผลสภาพอากาศ</p>
                     </div>
+
                     <div class="flex flex-col gap-4 min-w-0 md:min-w-[310px]">
                       <div class="bg-white/15 backdrop-blur-md rounded-3xl p-4 grid grid-cols-2 gap-4 border border-white/10">
                         <div><span class="text-white/60 block text-xs">ดัชนี UV</span><strong id="heroUV" class="text-lg flex items-center gap-1.5 mt-0.5">-</strong></div>
@@ -240,12 +406,18 @@
                 </div>
 
                 <div class="soft-card rounded-[2rem] p-5 sm:p-6">
-                  <div class="flex justify-between items-center mb-4"><h3 class="font-extrabold text-lg flex items-center gap-2"><i class="fa-regular fa-clock text-blue-600"></i> รายชั่วโมง</h3><button onclick="switchView('hourly')" class="text-xs text-blue-600 font-bold">ดูทั้งหมด</button></div>
+                  <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-extrabold text-lg flex items-center gap-2"><i class="fa-regular fa-clock text-blue-600"></i> รายชั่วโมง</h3>
+                    <button onclick="switchView('hourly')" class="text-xs text-blue-600 font-bold">ดูทั้งหมด</button>
+                  </div>
                   <div id="hourlyOverview" class="flex gap-3 overflow-x-auto no-scrollbar pb-1 snap-x"></div>
                 </div>
 
                 <div class="soft-card rounded-[2rem] p-5 sm:p-6">
-                  <div class="flex justify-between items-center mb-4"><h3 class="font-extrabold text-lg flex items-center gap-2"><i class="fa-regular fa-calendar-days text-emerald-600"></i> รายวัน 7 วัน</h3><button onclick="switchView('daily')" class="text-xs text-emerald-600 font-bold">รายละเอียด</button></div>
+                  <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-extrabold text-lg flex items-center gap-2"><i class="fa-regular fa-calendar-days text-emerald-600"></i> รายวัน 7 วัน</h3>
+                    <button onclick="switchView('daily')" class="text-xs text-emerald-600 font-bold">รายละเอียด</button>
+                  </div>
                   <div id="dailyOverview" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3"></div>
                 </div>
 
@@ -296,33 +468,145 @@
 
               <div class="xl:col-span-4 space-y-6">
                 <div class="soft-card rounded-[2rem] p-5 sm:p-6 h-[380px] flex flex-col">
-                  <div class="flex items-center justify-between mb-3"><h3 class="font-extrabold text-lg"><i class="fa-solid fa-map-location-dot text-red-500"></i> แผนที่ตำแหน่ง</h3><button onclick="switchView('radar')" class="text-xs text-blue-600 font-bold">เต็มจอ</button></div>
-                  <div class="flex-1 rounded-3xl overflow-hidden border border-slate-200"><div id="previewMap" class="w-full h-full map-box flex items-center justify-center"><i class="fa-solid fa-spinner fa-spin text-slate-300 text-3xl"></i></div></div>
-                  <div class="mt-3"><div class="h-2 rounded-full radar-legend"></div><div class="flex justify-between text-[10px] text-slate-400 mt-1"><span>ฝนเบา</span><span>ฝนหนัก</span></div></div>
+                  <div class="flex items-center justify-between mb-3">
+                    <h3 class="font-extrabold text-lg"><i class="fa-solid fa-map-location-dot text-red-500"></i> แผนที่ตำแหน่ง</h3>
+                    <button onclick="switchView('radar')" class="text-xs text-blue-600 font-bold">เต็มจอ</button>
+                  </div>
+                  <div class="flex-1 rounded-3xl overflow-hidden border border-slate-200">
+                    <div id="previewMap" class="w-full h-full map-preview flex items-center justify-center"><i class="fa-solid fa-spinner fa-spin text-slate-300 text-3xl"></i></div>
+                  </div>
+                  <div class="mt-3">
+                    <div class="h-2 rounded-full radar-legend"></div>
+                    <div class="flex justify-between text-[10px] text-slate-400 mt-1"><span>ฝนเบา</span><span>ฝนหนัก</span></div>
+                  </div>
                 </div>
 
                 <div class="soft-card rounded-[2rem] p-5 sm:p-6">
-                  <div class="flex items-center justify-between mb-4"><h3 class="font-extrabold text-lg"><i class="fa-solid fa-wind text-emerald-500"></i> คุณภาพอากาศ</h3><button onclick="switchView('aqi')" class="text-xs text-emerald-600 font-bold">ดูเพิ่ม</button></div>
+                  <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-extrabold text-lg"><i class="fa-solid fa-wind text-emerald-500"></i> คุณภาพอากาศ</h3>
+                    <button onclick="switchView('aqi')" class="text-xs text-emerald-600 font-bold">ดูเพิ่ม</button>
+                  </div>
                   <div class="flex items-center gap-5 bg-slate-50 p-4 rounded-3xl">
-                    <div class="relative w-20 h-20 shrink-0"><svg class="w-full h-full -rotate-90"><circle cx="40" cy="40" r="32" stroke="#e2e8f0" stroke-width="7" fill="transparent"/><circle id="aqiCircle" cx="40" cy="40" r="32" stroke="#22c55e" stroke-width="7" stroke-dasharray="201" stroke-dashoffset="100" fill="transparent" stroke-linecap="round"/></svg><div class="absolute inset-0 flex flex-col items-center justify-center"><strong id="aqiScore" class="text-2xl font-black">-</strong><span id="aqiRating" class="text-[10px] text-emerald-500 font-bold">ดี</span></div></div>
+                    <div class="relative w-20 h-20 shrink-0">
+                      <svg class="w-full h-full -rotate-90"><circle cx="40" cy="40" r="32" stroke="#e2e8f0" stroke-width="7" fill="transparent"/><circle id="aqiCircle" cx="40" cy="40" r="32" stroke="#22c55e" stroke-width="7" stroke-dasharray="201" stroke-dashoffset="100" fill="transparent" stroke-linecap="round"/></svg>
+                      <div class="absolute inset-0 flex flex-col items-center justify-center"><strong id="aqiScore" class="text-2xl font-black">-</strong><span id="aqiRating" class="text-[10px] text-emerald-500 font-bold">ดี</span></div>
+                    </div>
                     <div><h4 id="aqiDesc" class="font-bold">AQI โดยประมาณ</h4><p class="text-xs text-slate-500 mt-1">ประเมินจากพื้นที่ใกล้เคียง</p></div>
                   </div>
-                  <div class="grid grid-cols-2 gap-3 text-xs mt-4"><div class="bg-slate-50 p-3 rounded-2xl flex justify-between"><span>PM2.5</span><strong id="pm25Val">-</strong></div><div class="bg-slate-50 p-3 rounded-2xl flex justify-between"><span>PM10</span><strong id="pm10Val">-</strong></div></div>
+                  <div class="grid grid-cols-2 gap-3 text-xs mt-4">
+                    <div class="bg-slate-50 p-3 rounded-2xl flex justify-between"><span>PM2.5</span><strong id="pm25Val">-</strong></div>
+                    <div class="bg-slate-50 p-3 rounded-2xl flex justify-between"><span>PM10</span><strong id="pm10Val">-</strong></div>
+                  </div>
                 </div>
 
-                <div class="soft-card rounded-[2rem] p-5 sm:p-6"><h3 class="font-extrabold text-lg mb-4"><i class="fa-solid fa-sun text-yellow-500"></i> ดวงอาทิตย์</h3><div class="grid grid-cols-2 gap-3"><div class="bg-slate-50 p-4 rounded-2xl"><span class="text-xs text-slate-500 block">ขึ้นเวลา</span><strong id="sunriseTime">-</strong></div><div class="bg-slate-50 p-4 rounded-2xl"><span class="text-xs text-slate-500 block">ตกเวลา</span><strong id="sunsetTime">-</strong></div></div><p id="dayLengthText" class="text-xs text-slate-500 mt-3">ความยาวกลางวัน: -</p></div>
+                <div class="soft-card rounded-[2rem] p-5 sm:p-6">
+                  <h3 class="font-extrabold text-lg mb-4"><i class="fa-solid fa-sun text-yellow-500"></i> ดวงอาทิตย์</h3>
+                  <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-slate-50 p-4 rounded-2xl"><span class="text-xs text-slate-500 block">ขึ้นเวลา</span><strong id="sunriseTime">-</strong></div>
+                    <div class="bg-slate-50 p-4 rounded-2xl"><span class="text-xs text-slate-500 block">ตกเวลา</span><strong id="sunsetTime">-</strong></div>
+                  </div>
+                  <p id="dayLengthText" class="text-xs text-slate-500 mt-3">ความยาวกลางวัน: -</p>
+                </div>
               </div>
             </div>
           </section>
 
-          <section id="view-hourly" class="view-content hidden"><div class="soft-card rounded-[2rem] p-5 sm:p-6"><h2 class="text-2xl font-extrabold mb-2"><i class="fa-solid fa-clock text-blue-600"></i> พยากรณ์รายชั่วโมง</h2><p class="text-sm text-slate-500 mb-5">ข้อมูล 24 ชั่วโมงถัดไป</p><div id="hourlyFull" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4"></div></div></section>
-          <section id="view-daily" class="view-content hidden"><div class="soft-card rounded-[2rem] p-5 sm:p-6"><h2 class="text-2xl font-extrabold mb-2"><i class="fa-solid fa-calendar-days text-emerald-600"></i> พยากรณ์รายวัน</h2><p class="text-sm text-slate-500 mb-5">แนวโน้ม 7 วันข้างหน้า</p><div id="dailyFull" class="space-y-4"></div></div></section>
-          <section id="view-radar" class="view-content hidden"><div class="soft-card rounded-[2rem] p-5 sm:p-6"><div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4"><div><h2 class="text-2xl font-extrabold"><i class="fa-solid fa-satellite-dish text-red-500"></i> แผนที่ระบบเรดาร์</h2><p class="text-sm text-slate-500">ย่อ ขยาย และดูพื้นที่ตำแหน่งปัจจุบัน</p></div><button onclick="resetRadarMap()" class="bg-blue-600 text-white px-4 py-2 rounded-2xl text-sm font-bold">กลับศูนย์กลาง</button></div><div class="map-full rounded-3xl overflow-hidden border border-slate-200 relative"><div id="fullscreenRadarMap" class="w-full h-full flex items-center justify-center"><i class="fa-solid fa-spinner fa-spin text-slate-300 text-4xl"></i></div><div class="absolute bottom-4 left-4 right-4 sm:right-auto sm:w-72 bg-white/95 backdrop-blur p-4 rounded-3xl shadow-xl z-[999]"><strong class="text-sm">ความแรงของกลุ่มเมฆฝน</strong><div class="h-3 rounded-full radar-legend mt-2"></div><div class="flex justify-between text-[10px] text-slate-400 mt-1"><span>เบาบาง</span><span>หนักมาก</span></div></div></div></div></section>
-          <section id="view-aqi" class="view-content hidden"><div class="soft-card rounded-[2rem] p-5 sm:p-6"><h2 class="text-2xl font-extrabold mb-2"><i class="fa-solid fa-wind text-teal-600"></i> คุณภาพอากาศ</h2><p class="text-sm text-slate-500 mb-5">ข้อมูล AQI เป็นค่าประเมินเบื้องต้น</p><div class="grid grid-cols-1 lg:grid-cols-3 gap-5"><div class="bg-slate-50 rounded-3xl p-6 text-center flex flex-col items-center"><strong id="aqiFullScore" class="text-7xl font-black text-slate-800">-</strong><span id="aqiTextSub" class="text-emerald-600 font-bold">ดี</span><p class="text-xs text-slate-500 mt-3">เหมาะกับกิจกรรมกลางแจ้ง</p></div><div class="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4"><div class="bg-slate-50 p-5 rounded-3xl"><span class="text-xs text-slate-500">PM2.5</span><strong id="aqiPM25" class="block text-3xl mt-2">-</strong></div><div class="bg-slate-50 p-5 rounded-3xl"><span class="text-xs text-slate-500">PM10</span><strong id="aqiPM10" class="block text-3xl mt-2">-</strong></div><div class="bg-slate-50 p-5 rounded-3xl"><span class="text-xs text-slate-500">O₃</span><strong id="aqiO3" class="block text-3xl mt-2">24 ppb</strong></div><div class="bg-slate-50 p-5 rounded-3xl"><span class="text-xs text-slate-500">NO₂</span><strong id="aqiNO2" class="block text-3xl mt-2">9 ppb</strong></div></div></div></div></section>
-          <section id="view-astronomy" class="view-content hidden"><div class="soft-card rounded-[2rem] p-5 sm:p-6"><h2 class="text-2xl font-extrabold mb-2"><i class="fa-solid fa-moon text-indigo-600"></i> ดวงอาทิตย์และดวงจันทร์</h2><p class="text-sm text-slate-500 mb-5">เวลาขึ้นและตกตามพิกัดปัจจุบัน</p><div class="grid grid-cols-1 md:grid-cols-2 gap-5"><div class="bg-slate-50 rounded-3xl p-6 text-center"><i class="fa-solid fa-sun text-yellow-500 text-6xl mb-4"></i><h3 class="font-extrabold text-lg">ดวงอาทิตย์</h3><div class="grid grid-cols-2 gap-3 mt-4"><div class="bg-white p-4 rounded-2xl"><span class="text-xs text-slate-500">ขึ้น</span><strong id="astroSunrise" class="block text-xl">-</strong></div><div class="bg-white p-4 rounded-2xl"><span class="text-xs text-slate-500">ตก</span><strong id="astroSunset" class="block text-xl">-</strong></div></div></div><div class="bg-slate-50 rounded-3xl p-6 text-center"><i class="fa-solid fa-moon text-indigo-500 text-6xl mb-4"></i><h3 class="font-extrabold text-lg">ดวงจันทร์</h3><div class="grid grid-cols-2 gap-3 mt-4"><div class="bg-white p-4 rounded-2xl"><span class="text-xs text-slate-500">ขึ้น</span><strong class="block text-xl">18:45 น.</strong></div><div class="bg-white p-4 rounded-2xl"><span class="text-xs text-slate-500">ตก</span><strong class="block text-xl">06:15 น.</strong></div></div></div></div></div></section>
-          <section id="view-alerts" class="view-content hidden"><div class="soft-card rounded-[2rem] p-5 sm:p-6"><h2 class="text-2xl font-extrabold mb-2"><i class="fa-solid fa-triangle-exclamation text-amber-500"></i> แจ้งเตือนสภาพอากาศ</h2><p class="text-sm text-slate-500 mb-5">ระบบแจ้งเตือนจากข้อมูลพยากรณ์ในพื้นที่</p><div id="alertContainer"></div></div></section>
-          <section id="view-history" class="view-content hidden"><div class="soft-card rounded-[2rem] p-5 sm:p-6"><h2 class="text-2xl font-extrabold mb-2"><i class="fa-solid fa-chart-bar text-blue-600"></i> สถิติเปรียบเทียบ</h2><p class="text-sm text-slate-500 mb-5">เปรียบเทียบอุณหภูมิและความเร็วลมรายชั่วโมง</p><div class="h-[420px] relative"><canvas id="historicalCompareChart"></canvas></div></div></section>
-          <section id="view-settings" class="view-content hidden"><div class="soft-card rounded-[2rem] p-5 sm:p-6 max-w-2xl mx-auto"><h2 class="text-2xl font-extrabold mb-2"><i class="fa-solid fa-cog text-slate-600"></i> ตั้งค่าระบบ</h2><p class="text-sm text-slate-500 mb-5">ตั้งค่าแอปและการแสดงผล</p><div class="flex items-center justify-between gap-4 py-4 border-b"><div><h4 class="font-bold">หน่วยอุณหภูมิ</h4><p class="text-xs text-slate-500">เลือก Celsius หรือ Fahrenheit</p></div><div class="flex bg-slate-100 p-1 rounded-xl w-32"><button id="setBtnC" onclick="switchUnit('C')" class="unit-btn flex-1 py-2 text-xs font-bold rounded-lg bg-blue-600 text-white">°C</button><button id="setBtnF" onclick="switchUnit('F')" class="unit-btn flex-1 py-2 text-xs font-bold rounded-lg text-slate-500">°F</button></div></div><div class="mt-5 p-4 bg-emerald-50 border border-emerald-100 rounded-3xl text-sm text-emerald-800"><strong><i class="fa-solid fa-check-circle"></i> รองรับ iOS และ Google Apps Script</strong><p class="text-xs mt-1">ปรับ safe-area, bottom navigation, font-size 16px และ fallback ตำแหน่งเรียบร้อย</p></div></div></section>
+          <section id="view-hourly" class="view-content hidden">
+            <div class="soft-card rounded-[2rem] p-5 sm:p-6">
+              <h2 class="text-2xl font-extrabold mb-2"><i class="fa-solid fa-clock text-blue-600"></i> พยากรณ์รายชั่วโมง</h2>
+              <p class="text-sm text-slate-500 mb-5">ข้อมูล 24 ชั่วโมงถัดไป</p>
+              <div id="hourlyFull" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4"></div>
+            </div>
+          </section>
+
+          <section id="view-daily" class="view-content hidden">
+            <div class="soft-card rounded-[2rem] p-5 sm:p-6">
+              <h2 class="text-2xl font-extrabold mb-2"><i class="fa-solid fa-calendar-days text-emerald-600"></i> พยากรณ์รายวัน</h2>
+              <p class="text-sm text-slate-500 mb-5">แนวโน้ม 7 วันข้างหน้า</p>
+              <div id="dailyFull" class="space-y-4"></div>
+            </div>
+          </section>
+
+          <section id="view-radar" class="view-content hidden">
+            <div class="soft-card rounded-[2rem] p-5 sm:p-6">
+              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+                <div>
+                  <h2 class="text-2xl font-extrabold"><i class="fa-solid fa-satellite-dish text-red-500"></i> แผนที่ระบบเรดาร์</h2>
+                  <p class="text-sm text-slate-500">ย่อ ขยาย และดูพื้นที่ตำแหน่งปัจจุบัน</p>
+                </div>
+                <button onclick="resetRadarMap()" class="bg-blue-600 text-white px-4 py-2 rounded-2xl text-sm font-bold">กลับศูนย์กลาง</button>
+              </div>
+              <div class="map-full rounded-3xl overflow-hidden border border-slate-200 relative">
+                <div id="fullscreenRadarMap" class="w-full h-full flex items-center justify-center"><i class="fa-solid fa-spinner fa-spin text-slate-300 text-4xl"></i></div>
+                <div class="absolute bottom-4 left-4 right-4 sm:right-auto sm:w-72 bg-white/95 backdrop-blur p-4 rounded-3xl shadow-xl z-[999]">
+                  <strong class="text-sm">ความแรงของกลุ่มเมฆฝน</strong>
+                  <div class="h-3 rounded-full radar-legend mt-2"></div>
+                  <div class="flex justify-between text-[10px] text-slate-400 mt-1"><span>เบาบาง</span><span>หนักมาก</span></div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section id="view-aqi" class="view-content hidden">
+            <div class="soft-card rounded-[2rem] p-5 sm:p-6">
+              <h2 class="text-2xl font-extrabold mb-2"><i class="fa-solid fa-wind text-teal-600"></i> คุณภาพอากาศ</h2>
+              <p class="text-sm text-slate-500 mb-5">ข้อมูล AQI เป็นค่าประเมินเบื้องต้น</p>
+              <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+                <div class="bg-slate-50 rounded-3xl p-6 text-center flex flex-col items-center"><strong id="aqiFullScore" class="text-7xl font-black text-slate-800">-</strong><span id="aqiTextSub" class="text-emerald-600 font-bold">ดี</span><p class="text-xs text-slate-500 mt-3">เหมาะกับกิจกรรมกลางแจ้ง</p></div>
+                <div class="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div class="bg-slate-50 p-5 rounded-3xl"><span class="text-xs text-slate-500">PM2.5</span><strong id="aqiPM25" class="block text-3xl mt-2">-</strong></div>
+                  <div class="bg-slate-50 p-5 rounded-3xl"><span class="text-xs text-slate-500">PM10</span><strong id="aqiPM10" class="block text-3xl mt-2">-</strong></div>
+                  <div class="bg-slate-50 p-5 rounded-3xl"><span class="text-xs text-slate-500">O₃</span><strong id="aqiO3" class="block text-3xl mt-2">24 ppb</strong></div>
+                  <div class="bg-slate-50 p-5 rounded-3xl"><span class="text-xs text-slate-500">NO₂</span><strong id="aqiNO2" class="block text-3xl mt-2">9 ppb</strong></div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section id="view-astronomy" class="view-content hidden">
+            <div class="soft-card rounded-[2rem] p-5 sm:p-6">
+              <h2 class="text-2xl font-extrabold mb-2"><i class="fa-solid fa-moon text-indigo-600"></i> ดวงอาทิตย์และดวงจันทร์</h2>
+              <p class="text-sm text-slate-500 mb-5">เวลาขึ้นและตกตามพิกัดปัจจุบัน</p>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div class="bg-slate-50 rounded-3xl p-6 text-center"><i class="fa-solid fa-sun text-yellow-500 text-6xl mb-4"></i><h3 class="font-extrabold text-lg">ดวงอาทิตย์</h3><div class="grid grid-cols-2 gap-3 mt-4"><div class="bg-white p-4 rounded-2xl"><span class="text-xs text-slate-500">ขึ้น</span><strong id="astroSunrise" class="block text-xl">-</strong></div><div class="bg-white p-4 rounded-2xl"><span class="text-xs text-slate-500">ตก</span><strong id="astroSunset" class="block text-xl">-</strong></div></div></div>
+                <div class="bg-slate-50 rounded-3xl p-6 text-center"><i class="fa-solid fa-moon text-indigo-500 text-6xl mb-4"></i><h3 class="font-extrabold text-lg">ดวงจันทร์</h3><div class="grid grid-cols-2 gap-3 mt-4"><div class="bg-white p-4 rounded-2xl"><span class="text-xs text-slate-500">ขึ้น</span><strong class="block text-xl">18:45 น.</strong></div><div class="bg-white p-4 rounded-2xl"><span class="text-xs text-slate-500">ตก</span><strong class="block text-xl">06:15 น.</strong></div></div></div>
+              </div>
+            </div>
+          </section>
+
+          <section id="view-alerts" class="view-content hidden">
+            <div class="soft-card rounded-[2rem] p-5 sm:p-6">
+              <h2 class="text-2xl font-extrabold mb-2"><i class="fa-solid fa-triangle-exclamation text-amber-500"></i> แจ้งเตือนสภาพอากาศ</h2>
+              <p class="text-sm text-slate-500 mb-5">ระบบแจ้งเตือนจากข้อมูลพยากรณ์ในพื้นที่</p>
+              <div id="alertContainer"></div>
+            </div>
+          </section>
+
+          <section id="view-history" class="view-content hidden">
+            <div class="soft-card rounded-[2rem] p-5 sm:p-6">
+              <h2 class="text-2xl font-extrabold mb-2"><i class="fa-solid fa-chart-bar text-blue-600"></i> สถิติเปรียบเทียบ</h2>
+              <p class="text-sm text-slate-500 mb-5">เปรียบเทียบอุณหภูมิและความเร็วลมรายชั่วโมง</p>
+              <div class="h-[420px] relative"><canvas id="historicalCompareChart"></canvas></div>
+            </div>
+          </section>
+
+          <section id="view-settings" class="view-content hidden">
+            <div class="soft-card rounded-[2rem] p-5 sm:p-6 max-w-2xl mx-auto">
+              <h2 class="text-2xl font-extrabold mb-2"><i class="fa-solid fa-cog text-slate-600"></i> ตั้งค่าระบบ</h2>
+              <p class="text-sm text-slate-500 mb-5">ตั้งค่าแอปและการแสดงผล</p>
+              <div class="flex items-center justify-between gap-4 py-4 border-b">
+                <div><h4 class="font-bold">หน่วยอุณหภูมิ</h4><p class="text-xs text-slate-500">เลือก Celsius หรือ Fahrenheit</p></div>
+                <div class="flex bg-slate-100 p-1 rounded-xl w-32">
+                  <button id="setBtnC" onclick="switchUnit('C')" class="unit-btn flex-1 py-2 text-xs font-bold rounded-lg bg-blue-600 text-white">°C</button>
+                  <button id="setBtnF" onclick="switchUnit('F')" class="unit-btn flex-1 py-2 text-xs font-bold rounded-lg text-slate-500">°F</button>
+                </div>
+              </div>
+              <div class="mt-5 p-4 bg-emerald-50 border border-emerald-100 rounded-3xl text-sm text-emerald-800">
+                <strong><i class="fa-solid fa-check-circle"></i> รองรับ iOS และ Google Apps Script</strong>
+                <p class="text-xs mt-1">ปรับ safe-area, bottom navigation, font-size 16px และ fallback ตำแหน่งเรียบร้อย</p>
+              </div>
+            </div>
+          </section>
         </div>
       </main>
     </div>
@@ -348,27 +632,72 @@
     let fullCircle = null;
 
     const fallbackData = {
-      name:'กรุงเทพมหานคร', country:'ประเทศไทย', temp:32, maxTemp:34, minTemp:26, condition:'มีเมฆบางส่วน', feelsLike:36, uv:7, rainChance:20, humidity:65, windSpeed:12, windDir:'NE (ตะวันออกเฉียงเหนือ)', windDegree:45, windMax:20, pressure:1010, visibility:10, aqi:42, pm25:12, pm10:28, sunrise:'06:00 น.', sunset:'18:30 น.', icon:'fa-cloud-sun', coords:[13.7563,100.5018], hourly:[], daily:[]
+      name:'กรุงเทพมหานคร',
+      country:'ประเทศไทย',
+      temp:32,
+      maxTemp:34,
+      minTemp:26,
+      condition:'มีเมฆบางส่วน',
+      feelsLike:36,
+      uv:7,
+      rainChance:20,
+      humidity:65,
+      windSpeed:12,
+      windDir:'NE (ตะวันออกเฉียงเหนือ)',
+      windDegree:45,
+      windMax:20,
+      pressure:1010,
+      visibility:10,
+      aqi:42,
+      pm25:12,
+      pm10:28,
+      sunrise:'06:00 น.',
+      sunset:'18:30 น.',
+      icon:'fa-cloud-sun',
+      coords:[13.7563,100.5018],
+      hourly:[],
+      daily:[]
     };
 
     document.addEventListener('DOMContentLoaded', () => {
       buildFallbackLists();
+      switchView('overview', false);
       getUserLocation();
     });
 
     function buildFallbackLists(){
       const hours = ['ตอนนี้','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00','21:00','22:00','23:00','00:00','01:00','02:00','03:00','04:00','05:00','06:00','07:00','08:00'];
-      fallbackData.hourly = hours.map((h,i)=>({time:h,temp:32 + Math.round(Math.sin(i/4)*2),icon:i%5===0?'fa-cloud-showers-heavy':'fa-cloud-sun',rain:(i%5===0?45:20)+'%',wind:(12+i%7)+' km/h'}));
+      fallbackData.hourly = hours.map((h,i)=>({
+        time:h,
+        temp:32 + Math.round(Math.sin(i/4)*2),
+        icon:i%5===0?'fa-cloud-showers-heavy':'fa-cloud-sun',
+        rain:(i%5===0?45:20)+'%',
+        wind:(12+i%7)+' km/h'
+      }));
       const days = ['วันนี้','พรุ่งนี้','พุธ','พฤหัสบดี','ศุกร์','เสาร์','อาทิตย์'];
-      fallbackData.daily = days.map((d,i)=>({day:d,date:(20+i)+' พ.ค.',tempMax:34-i%3,tempMin:25+i%2,icon:i%3===0?'fa-cloud-showers-heavy':'fa-cloud-sun',rain:(20+i*8)+'%'}));
+      fallbackData.daily = days.map((d,i)=>({
+        day:d,
+        date:(20+i)+' พ.ค.',
+        tempMax:34-i%3,
+        tempMin:25+i%2,
+        icon:i%3===0?'fa-cloud-showers-heavy':'fa-cloud-sun',
+        rain:(20+i*8)+'%'
+      }));
     }
 
     function showToast(message,type='info'){
       const toast = document.getElementById('toast');
-      document.getElementById('toastText').textContent = message;
+      const text = document.getElementById('toastText');
+      if(!toast || !text) return;
+      text.textContent = message;
       toast.className = `toast ${type==='error'?'bg-red-500':'bg-blue-600'} show`;
       clearTimeout(showToast.timer);
       showToast.timer = setTimeout(()=>toast.classList.remove('show'),3200);
+    }
+
+    function setLoadingTitle(text){
+      const el = document.getElementById('cityName');
+      if(el) el.innerHTML = `${text} <i class='fa-solid fa-spinner fa-spin text-base ml-1'></i>`;
     }
 
     function getUserLocation(){
@@ -380,19 +709,25 @@
           () => fetchLocationByIP(),
           {enableHighAccuracy:false,timeout:6500,maximumAge:600000}
         );
-      }else fetchLocationByIP();
+      }else{
+        fetchLocationByIP();
+      }
     }
 
     async function fetchLocationByIP(){
       try{
         showToast('กำลังระบุตำแหน่งจาก IP Address...');
         const res = await fetch('https://get.geojs.io/v1/ip/geo.json');
+        if(!res.ok) throw new Error('IP location failed');
         const data = await res.json();
         if(data && data.latitude && data.longitude){
           const name = data.city ? `${data.city}, ${data.country}` : null;
           await fetchWeather(parseFloat(data.latitude),parseFloat(data.longitude),name);
-        }else throw new Error('No IP location');
+        }else{
+          throw new Error('No IP location');
+        }
       }catch(e){
+        console.warn(e);
         showToast('ไม่สามารถระบุตำแหน่งได้ ใช้ข้อมูลจำลองแทน','error');
         initApp(fallbackData);
       }
@@ -418,7 +753,7 @@
               }
             }
           }catch(e){
-            console.warn('Reverse geocode failed, continue with coordinate name', e);
+            console.warn('Reverse geocode failed', e);
           }
         }
 
@@ -440,13 +775,13 @@
         const d = w.daily || {};
         const hTime = h.time || [];
         const hTemp = h.temperature_2m || [];
-        const hHum = h.relative_humidity_2m || h.relativehumidity_2m || [];
+        const hHum = h.relative_humidity_2m || [];
         const hRain = h.precipitation_probability || [];
-        const hWind = h.wind_speed_10m || h.windspeed_10m || [];
-        const hCode = h.weather_code || h.weathercode || [];
+        const hWind = h.wind_speed_10m || [];
+        const hCode = h.weather_code || [];
         const hVis = h.visibility || [];
         const hPress = h.surface_pressure || [];
-        const dCode = d.weather_code || d.weathercode || [];
+        const dCode = d.weather_code || [];
 
         if(!hTime.length || !hTemp.length || !d.temperature_2m_max || !d.temperature_2m_min){
           throw new Error('weather data incomplete');
@@ -455,7 +790,7 @@
         const nowIndexRaw = hTime.findIndex(t => new Date(t) >= new Date());
         const idx0 = nowIndexRaw < 0 ? 0 : nowIndexRaw;
         const currentTemp = safeNum(cur.temperature_2m, hTemp[idx0] ?? 0);
-        const currentCode = safeNum(cur.weather_code ?? cur.weathercode, hCode[idx0] ?? 0);
+        const currentCode = safeNum(cur.weather_code, hCode[idx0] ?? 0);
         const currentWind = safeNum(cur.wind_speed_10m, hWind[idx0] ?? 0);
         const currentWindDir = safeNum(cur.wind_direction_10m, 0);
         const currentHum = safeNum(cur.relative_humidity_2m, hHum[idx0] ?? 0);
@@ -532,49 +867,65 @@
       }
     }
 
-    function weatherMeta(code){
-      const map = {0:['ฟ้าใส','fa-sun'],1:['ท้องฟ้าแจ่มใส','fa-sun'],2:['มีเมฆบางส่วน','fa-cloud-sun'],3:['มีเมฆมาก','fa-cloud'],45:['มีหมอก','fa-smog'],48:['หมอกลงจัด','fa-smog'],51:['ฝนปรอยๆ','fa-cloud-rain'],53:['ฝนเล็กน้อย','fa-cloud-rain'],55:['ฝนปานกลาง','fa-cloud-rain'],61:['ฝนตก','fa-cloud-showers-heavy'],63:['ฝนตกหนัก','fa-cloud-showers-heavy'],65:['ฝนตกหนักมาก','fa-cloud-showers-heavy'],80:['ฝนตกสลับหยุด','fa-cloud-showers-heavy'],81:['ฝนตกหนักเป็นช่วง','fa-cloud-showers-heavy'],82:['ฝนตกกระหน่ำ','fa-cloud-showers-heavy'],95:['พายุฝนฟ้าคะนอง','fa-cloud-bolt']};
-      const m = map[code] || ['ไม่ทราบสถานะ','fa-cloud-sun']; return {desc:m[0],icon:m[1]};
-    }
-
-    function windDirection(deg){
-      if(deg>337.5||deg<=22.5) return 'N (เหนือ)'; if(deg<=67.5) return 'NE (ตะวันออกเฉียงเหนือ)'; if(deg<=112.5) return 'E (ตะวันออก)'; if(deg<=157.5) return 'SE (ตะวันออกเฉียงใต้)'; if(deg<=202.5) return 'S (ใต้)'; if(deg<=247.5) return 'SW (ตะวันตกเฉียงใต้)'; if(deg<=292.5) return 'W (ตะวันตก)'; return 'NW (ตะวันตกเฉียงเหนือ)';
-    }
-
     function initApp(data){
-      activeData = data; renderAll(); initOrUpdateMaps(); renderTempChart(); if(currentView==='history') renderCompareChart(); showToast('อัปเดตข้อมูลเรียบร้อย');
+      activeData = data;
+      renderAll();
+      initOrUpdateMaps();
+      renderTempChart();
+      if(currentView === 'history') renderCompareChart();
+      showToast('อัปเดตข้อมูลเรียบร้อย');
     }
-
-    function setLoadingTitle(text){document.getElementById('cityName').innerHTML = `${text} <i class='fa-solid fa-spinner fa-spin text-base ml-1'></i>`;}
-    function toTemp(c){return currentUnit==='C'?c:Math.round(c*9/5+32)}
-    function safeNum(value,fallback=0){const n=Number(value);return Number.isFinite(n)?n:fallback;}
 
     function renderAll(){
       if(!activeData) return;
-      const d = activeData; const now = new Date();
+      const d = activeData;
+      const now = new Date();
+      setText('sideLocationName', d.name);
+      setText('mobileLocationName', d.name);
       document.getElementById('cityName').innerHTML = `${d.name}, ${d.country} <i class="fa-solid fa-location-dot text-base ml-1 text-blue-200"></i>`;
-      document.getElementById('sideLocationName').textContent = d.name; document.getElementById('mobileLocationName').textContent = d.name;
-      document.getElementById('currentDateText').textContent = `${now.toLocaleDateString('th-TH',{weekday:'long',year:'numeric',month:'long',day:'numeric'})} ${now.toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'})} น.`;
-      document.getElementById('updateTimeText').textContent = `อัปเดตล่าสุด: ${now.toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'})} น.`;
-      document.getElementById('heroTemp').textContent = toTemp(d.temp); document.getElementById('heroUnit').textContent = currentUnit;
+      setText('currentDateText', `${now.toLocaleDateString('th-TH',{weekday:'long',year:'numeric',month:'long',day:'numeric'})} ${now.toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'})} น.`);
+      setText('updateTimeText', `อัปเดตล่าสุด: ${now.toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'})} น.`);
+      setText('heroTemp', toTemp(d.temp));
+      setText('heroUnit', currentUnit);
       document.getElementById('heroIcon').className = `fa-solid ${d.icon} text-yellow-300 weather-icon-shadow text-5xl sm:text-6xl animate-pulse`;
       document.getElementById('heroCondition').innerHTML = `${d.condition} <span class="text-sm bg-white/20 px-3 py-1 rounded-full font-medium ml-1 inline-block mt-1">รู้สึกเหมือน ${toTemp(d.feelsLike)}°${currentUnit}</span>`;
-      document.getElementById('heroUV').innerHTML = `<i class="fa-solid fa-sun text-yellow-300"></i> ${d.uv}`; document.getElementById('heroRainChance').innerHTML = `<i class="fa-solid fa-cloud-showers-heavy text-blue-200"></i> ${d.rainChance}%`;
-      document.getElementById('heroMax').textContent = `${toTemp(d.maxTemp)}°${currentUnit}`; document.getElementById('heroMin').textContent = `${toTemp(d.minTemp)}°${currentUnit}`; document.getElementById('heroHumid').textContent = `${d.humidity}%`; document.getElementById('heroWind').textContent = `${d.windSpeed} km/h`; document.getElementById('heroPress').textContent = `${d.pressure} hPa`; document.getElementById('heroVis').textContent = `${d.visibility} km`;
-      renderHourly(); renderDaily(); renderWindRain(); renderAQI(); renderAstronomy(); renderAlerts();
+      document.getElementById('heroUV').innerHTML = `<i class="fa-solid fa-sun text-yellow-300"></i> ${d.uv}`;
+      document.getElementById('heroRainChance').innerHTML = `<i class="fa-solid fa-cloud-showers-heavy text-blue-200"></i> ${d.rainChance}%`;
+      setText('heroMax', `${toTemp(d.maxTemp)}°${currentUnit}`);
+      setText('heroMin', `${toTemp(d.minTemp)}°${currentUnit}`);
+      setText('heroHumid', `${d.humidity}%`);
+      setText('heroWind', `${d.windSpeed} km/h`);
+      setText('heroPress', `${d.pressure} hPa`);
+      setText('heroVis', `${d.visibility} km`);
+      renderHourly();
+      renderDaily();
+      renderWindRain();
+      renderAQI();
+      renderAstronomy();
+      renderAlerts();
     }
 
     function renderHourly(){
-      const overview = document.getElementById('hourlyOverview'); const full = document.getElementById('hourlyFull'); overview.innerHTML=''; full.innerHTML='';
+      const overview = document.getElementById('hourlyOverview');
+      const full = document.getElementById('hourlyFull');
+      if(!overview || !full) return;
+      overview.innerHTML='';
+      full.innerHTML='';
       activeData.hourly.forEach((item,i)=>{
         const temp = toTemp(item.temp);
-        if(i<8) overview.insertAdjacentHTML('beforeend',`<div class="snap-start min-w-[94px] bg-slate-50 rounded-3xl p-3 text-center border border-slate-100"><span class="text-xs font-bold text-slate-500">${item.time}</span><i class="fa-solid ${item.icon} text-2xl text-blue-500 my-3 block"></i><strong class="text-lg">${temp}°</strong><div class="text-[10px] text-blue-500 mt-1">${item.rain}</div></div>`);
+        if(i<8){
+          overview.insertAdjacentHTML('beforeend',`<div class="snap-start min-w-[94px] bg-slate-50 rounded-3xl p-3 text-center border border-slate-100"><span class="text-xs font-bold text-slate-500">${item.time}</span><i class="fa-solid ${item.icon} text-2xl text-blue-500 my-3 block"></i><strong class="text-lg">${temp}°</strong><div class="text-[10px] text-blue-500 mt-1">${item.rain}</div></div>`);
+        }
         full.insertAdjacentHTML('beforeend',`<div class="bg-slate-50 rounded-3xl p-4 border border-slate-100 flex items-center justify-between gap-3"><div><div class="font-bold text-slate-700">${item.time}</div><div class="text-[11px] text-slate-400">ฝน ${item.rain} • ลม ${item.wind}</div></div><i class="fa-solid ${item.icon} text-blue-500 text-2xl"></i><strong class="text-xl">${temp}°${currentUnit}</strong></div>`);
       });
     }
 
     function renderDaily(){
-      const overview = document.getElementById('dailyOverview'); const full = document.getElementById('dailyFull'); overview.innerHTML=''; full.innerHTML='';
+      const overview = document.getElementById('dailyOverview');
+      const full = document.getElementById('dailyFull');
+      if(!overview || !full) return;
+      overview.innerHTML='';
+      full.innerHTML='';
       activeData.daily.forEach(day=>{
         overview.insertAdjacentHTML('beforeend',`<div class="bg-slate-50 p-3 rounded-3xl text-center border border-slate-100"><div class="text-xs font-bold text-slate-600">${day.day}</div><div class="text-[10px] text-slate-400">${day.date}</div><i class="fa-solid ${day.icon} text-2xl text-yellow-500 my-3 block"></i><div class="text-sm font-bold">${toTemp(day.tempMax)}° <span class="text-slate-400">/ ${toTemp(day.tempMin)}°</span></div><div class="text-[10px] text-blue-500 mt-1">ฝน ${day.rain}</div></div>`);
         full.insertAdjacentHTML('beforeend',`<div class="bg-slate-50 rounded-3xl p-4 flex items-center gap-4 border border-slate-100"><div class="w-24"><div class="font-bold">${day.day}</div><div class="text-xs text-slate-400">${day.date}</div></div><i class="fa-solid ${day.icon} text-3xl text-yellow-500 w-12 text-center"></i><div class="flex-1"><div class="h-3 bg-gradient-to-r from-blue-300 via-emerald-300 to-orange-400 rounded-full"></div><div class="flex justify-between text-xs text-slate-500 mt-1"><span>${toTemp(day.tempMin)}°${currentUnit}</span><span>${toTemp(day.tempMax)}°${currentUnit}</span></div></div><div class="text-xs text-blue-500 font-bold">${day.rain}</div></div>`);
@@ -585,17 +936,13 @@
       if(!activeData) return;
       const d = activeData;
       const windNeedle = document.getElementById('windNeedle');
-      const windNow = document.getElementById('windNow');
-      const windDir = document.getElementById('windDir');
-      const windMax = document.getElementById('windMax');
-      const rainAmount = document.getElementById('rainAmount');
-      const rainBar = document.getElementById('rainBarDynamic');
       const windText = document.getElementById('windStatusMsg');
       if(windNeedle) windNeedle.style.transform = `rotate(${d.windDegree || 0}deg)`;
-      if(windNow) windNow.textContent = `${d.windSpeed || 0} km/h`;
-      if(windDir) windDir.textContent = d.windDir || '-';
-      if(windMax) windMax.textContent = `${d.windMax || 0} km/h`;
-      if(rainAmount) rainAmount.textContent = d.rainChance || 0;
+      setText('windNow', `${d.windSpeed || 0} km/h`);
+      setText('windDir', d.windDir || '-');
+      setText('windMax', `${d.windMax || 0} km/h`);
+      setText('rainAmount', d.rainChance || 0);
+      const rainBar = document.getElementById('rainBarDynamic');
       if(rainBar) rainBar.style.height = `${Math.max(10, d.rainChance || 0)}%`;
       if(windText){
         const windy = (d.windSpeed || 0) > 20;
@@ -605,24 +952,48 @@
     }
 
     function renderAQI(){
-      const d = activeData; const good = d.aqi < 50; document.getElementById('aqiScore').textContent=d.aqi; document.getElementById('aqiFullScore').textContent=d.aqi; document.getElementById('aqiRating').textContent=good?'ดี':'ปานกลาง'; document.getElementById('aqiTextSub').textContent=good?'ดีมาก':'ปานกลาง'; document.getElementById('pm25Val').textContent=d.pm25; document.getElementById('pm10Val').textContent=d.pm10; document.getElementById('aqiPM25').textContent=`${d.pm25} µg/m³`; document.getElementById('aqiPM10').textContent=`${d.pm10} µg/m³`; document.getElementById('aqiCircle').setAttribute('stroke-dashoffset',201-(Math.min(d.aqi,100)/100)*201);
+      const d = activeData;
+      const good = d.aqi < 50;
+      setText('aqiScore', d.aqi);
+      setText('aqiFullScore', d.aqi);
+      setText('aqiRating', good ? 'ดี' : 'ปานกลาง');
+      setText('aqiTextSub', good ? 'ดีมาก' : 'ปานกลาง');
+      setText('pm25Val', d.pm25);
+      setText('pm10Val', d.pm10);
+      setText('aqiPM25', `${d.pm25} µg/m³`);
+      setText('aqiPM10', `${d.pm10} µg/m³`);
+      const circle = document.getElementById('aqiCircle');
+      if(circle) circle.setAttribute('stroke-dashoffset',201-(Math.min(d.aqi,100)/100)*201);
     }
 
-    function renderAstronomy(){const d=activeData; ['sunriseTime','astroSunrise'].forEach(id=>document.getElementById(id).textContent=d.sunrise); ['sunsetTime','astroSunset'].forEach(id=>document.getElementById(id).textContent=d.sunset); document.getElementById('dayLengthText').innerHTML='ความยาวกลางวัน: <strong>ประมาณ 12 ชม. 30 นาที</strong>';}
-    function renderAlerts(){const c=document.getElementById('alertContainer'); if(activeData.hasAlert)c.innerHTML=`<div class="bg-amber-50 border-l-4 border-amber-400 p-6 rounded-r-3xl flex gap-4"><i class="fa-solid fa-triangle-exclamation text-amber-500 text-3xl mt-1 shrink-0"></i><div><h3 class="font-extrabold text-lg text-amber-800">${activeData.alertTitle}</h3><p class="text-sm text-amber-700 mt-2">${activeData.alertDesc}</p></div></div>`; else c.innerHTML='<div class="bg-slate-50 border-l-4 border-slate-300 p-6 rounded-r-3xl flex gap-4"><i class="fa-solid fa-shield-check text-slate-400 text-3xl mt-1 shrink-0"></i><div><h3 class="font-extrabold text-lg text-slate-700">สภาวะอากาศปกติ</h3><p class="text-sm text-slate-500 mt-2">ยังไม่มีการแจ้งเตือนพายุหรือสภาพอากาศรุนแรงในพื้นที่</p></div></div>';}
+    function renderAstronomy(){
+      const d = activeData;
+      ['sunriseTime','astroSunrise'].forEach(id=>setText(id,d.sunrise));
+      ['sunsetTime','astroSunset'].forEach(id=>setText(id,d.sunset));
+      const dayText = document.getElementById('dayLengthText');
+      if(dayText) dayText.innerHTML='ความยาวกลางวัน: <strong>ประมาณ 12 ชม. 30 นาที</strong>';
+    }
+
+    function renderAlerts(){
+      const c = document.getElementById('alertContainer');
+      if(!c) return;
+      if(activeData.hasAlert){
+        c.innerHTML = `<div class="bg-amber-50 border-l-4 border-amber-400 p-6 rounded-r-3xl flex gap-4"><i class="fa-solid fa-triangle-exclamation text-amber-500 text-3xl mt-1 shrink-0"></i><div><h3 class="font-extrabold text-lg text-amber-800">${activeData.alertTitle}</h3><p class="text-sm text-amber-700 mt-2">${activeData.alertDesc}</p></div></div>`;
+      }else{
+        c.innerHTML = '<div class="bg-slate-50 border-l-4 border-slate-300 p-6 rounded-r-3xl flex gap-4"><i class="fa-solid fa-shield-check text-slate-400 text-3xl mt-1 shrink-0"></i><div><h3 class="font-extrabold text-lg text-slate-700">สภาวะอากาศปกติ</h3><p class="text-sm text-slate-500 mt-2">ยังไม่มีการแจ้งเตือนพายุหรือสภาพอากาศรุนแรงในพื้นที่</p></div></div>';
+      }
+    }
 
     function initOrUpdateMaps(){
       if(!activeData) return;
       const previewBox = document.getElementById('previewMap');
       const fullBox = document.getElementById('fullscreenRadarMap');
-
       if(!window.L){
         const mapFallback = '<div class="w-full h-full flex items-center justify-center text-center text-sm text-slate-400 bg-slate-100 p-6">ไม่สามารถโหลดแผนที่ได้ กรุณาตรวจสอบอินเทอร์เน็ตหรือ CDN ของ Leaflet</div>';
         if(previewBox) previewBox.innerHTML = mapFallback;
         if(fullBox) fullBox.innerHTML = mapFallback;
         return;
       }
-
       const coords = activeData.coords;
       if(!previewMap){
         previewMap = L.map('previewMap',{zoomControl:false,attributionControl:false}).setView(coords,10);
@@ -692,8 +1063,16 @@
       canvas.parentElement.innerHTML = `<div class="h-full min-h-[220px] flex items-center justify-center text-center text-sm text-slate-400 bg-slate-50 rounded-3xl p-6">${message}</div>`;
     }
 
-    function switchView(view){
-      currentView=view; document.querySelectorAll('.view-content').forEach(v=>v.classList.add('hidden')); const active=document.getElementById(`view-${view}`); if(active) active.classList.remove('hidden'); document.querySelectorAll('[data-view]').forEach(btn=>btn.classList.toggle('active',btn.dataset.view===view)); if(view==='radar'&&fullMap)setTimeout(()=>fullMap.invalidateSize(),180); if(view==='history')setTimeout(renderCompareChart,120); window.scrollTo({top:0,behavior:'smooth'});
+    function switchView(view, animate=true){
+      currentView = view;
+      document.querySelectorAll('.view-content').forEach(section=>section.classList.add('hidden'));
+      const target = document.getElementById(`view-${view}`);
+      if(target) target.classList.remove('hidden');
+      document.querySelectorAll('[data-view]').forEach(btn=>btn.classList.toggle('active',btn.dataset.view===view));
+      if(view==='radar' && fullMap) setTimeout(()=>fullMap.invalidateSize(),200);
+      if(view==='history') setTimeout(renderCompareChart,120);
+      const scroller = document.querySelector('.content-scroll');
+      if(scroller) scroller.scrollTo({top:0,behavior:animate?'smooth':'auto'});
     }
 
     function switchUnit(unit){
@@ -718,7 +1097,13 @@
       }
     }
 
-    function searchLocation(event){event.preventDefault(); const q=document.getElementById('searchInput').value.trim(); if(!q)return; searchLocationByName(q);}
+    function searchLocation(event){
+      event.preventDefault();
+      const q = document.getElementById('searchInput').value.trim();
+      if(!q) return;
+      searchLocationByName(q);
+    }
+
     async function searchLocationByName(q){
       try{
         showToast(`กำลังค้นหา ${q}...`);
@@ -736,8 +1121,84 @@
         showToast('ไม่พบสถานที่ที่ค้นหา','error');
       }
     }
-    function resetRadarMap(){if(fullMap&&activeData){fullMap.setView(activeData.coords,10);showToast('กลับไปที่ศูนย์กลางแล้ว');}}
-    async function shareWeather(){if(!activeData)return; const text=`สภาพอากาศที่ ${activeData.name}: ${activeData.condition}, ${activeData.temp}°C, ฝน ${activeData.rainChance}%, ลม ${activeData.windSpeed} km/h`; try{if(navigator.share){await navigator.share({title:'WeatherPro',text});return;} await navigator.clipboard.writeText(text); showToast('คัดลอกข้อมูลสภาพอากาศแล้ว');}catch(e){const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.left='-999px';document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();showToast('คัดลอกข้อมูลสภาพอากาศแล้ว');}}
+
+    function resetRadarMap(){
+      if(fullMap && activeData){
+        fullMap.setView(activeData.coords,10);
+        showToast('กลับไปที่ศูนย์กลางแล้ว');
+      }
+    }
+
+    async function shareWeather(){
+      if(!activeData) return;
+      const text = `สภาพอากาศที่ ${activeData.name}: ${activeData.condition}, ${activeData.temp}°C, ฝน ${activeData.rainChance}%, ลม ${activeData.windSpeed} km/h`;
+      try{
+        if(navigator.share){
+          await navigator.share({title:'WeatherPro',text});
+          return;
+        }
+        await navigator.clipboard.writeText(text);
+        showToast('คัดลอกข้อมูลสภาพอากาศแล้ว');
+      }catch(e){
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.left = '-999px';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        ta.remove();
+        showToast('คัดลอกข้อมูลสภาพอากาศแล้ว');
+      }
+    }
+
+    function weatherMeta(code){
+      const map = {
+        0:['ฟ้าใส','fa-sun'],
+        1:['ท้องฟ้าแจ่มใส','fa-sun'],
+        2:['มีเมฆบางส่วน','fa-cloud-sun'],
+        3:['มีเมฆมาก','fa-cloud'],
+        45:['มีหมอก','fa-smog'],
+        48:['หมอกลงจัด','fa-smog'],
+        51:['ฝนปรอยๆ','fa-cloud-rain'],
+        53:['ฝนเล็กน้อย','fa-cloud-rain'],
+        55:['ฝนปานกลาง','fa-cloud-rain'],
+        61:['ฝนตก','fa-cloud-showers-heavy'],
+        63:['ฝนตกหนัก','fa-cloud-showers-heavy'],
+        65:['ฝนตกหนักมาก','fa-cloud-showers-heavy'],
+        80:['ฝนตกสลับหยุด','fa-cloud-showers-heavy'],
+        81:['ฝนตกหนักเป็นช่วง','fa-cloud-showers-heavy'],
+        82:['ฝนตกกระหน่ำ','fa-cloud-showers-heavy'],
+        95:['พายุฝนฟ้าคะนอง','fa-cloud-bolt']
+      };
+      const m = map[code] || ['ไม่ทราบสถานะ','fa-cloud-sun'];
+      return {desc:m[0],icon:m[1]};
+    }
+
+    function windDirection(deg){
+      if(deg>337.5 || deg<=22.5) return 'N (เหนือ)';
+      if(deg<=67.5) return 'NE (ตะวันออกเฉียงเหนือ)';
+      if(deg<=112.5) return 'E (ตะวันออก)';
+      if(deg<=157.5) return 'SE (ตะวันออกเฉียงใต้)';
+      if(deg<=202.5) return 'S (ใต้)';
+      if(deg<=247.5) return 'SW (ตะวันตกเฉียงใต้)';
+      if(deg<=292.5) return 'W (ตะวันตก)';
+      return 'NW (ตะวันตกเฉียงเหนือ)';
+    }
+
+    function toTemp(c){
+      return currentUnit === 'C' ? c : Math.round(c * 9 / 5 + 32);
+    }
+
+    function safeNum(value,fallback=0){
+      const n = Number(value);
+      return Number.isFinite(n) ? n : fallback;
+    }
+
+    function setText(id,value){
+      const el = document.getElementById(id);
+      if(el) el.textContent = value;
+    }
   </script>
 </body>
 </html>
@@ -758,6 +1219,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -791,72 +1253,119 @@
       --sidebar:#0b1220;
     }
 
-    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-    html{height:100%;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+    *{
+      box-sizing:border-box;
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    html{
+      height:100%;
+      -webkit-text-size-adjust:100%;
+      text-size-adjust:100%;
+    }
+
     body{
-      min-height:100dvh;
+      height:100%;
       margin:0;
-      overflow-x:hidden;
+      overflow:hidden;
       color:var(--ink);
       font-family:'Prompt','Inter',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
       background:
-        radial-gradient(circle at top left,rgba(37,99,235,.18),transparent 34rem),
+        radial-gradient(circle at top left,rgba(37,99,235,.16),transparent 34rem),
         radial-gradient(circle at bottom right,rgba(14,165,233,.13),transparent 30rem),
         var(--bg);
-      overscroll-behavior-y:none;
+      overscroll-behavior:none;
     }
 
-    button,input,select,textarea{font-family:inherit;font-size:16px}
-    button{min-height:44px;touch-action:manipulation;cursor:pointer}
-    input{-webkit-appearance:none;appearance:none}
+    button,
+    input,
+    select,
+    textarea{
+      font-family:inherit;
+      font-size:16px;
+    }
 
-    .app-shell{min-height:100dvh;display:flex;padding-left:var(--safe-left);padding-right:var(--safe-right)}
-    .desktop-sidebar{width:18rem;background:linear-gradient(180deg,#0b1220 0%,#08101f 100%)}
-    .main-area{min-width:0;flex:1;display:flex;flex-direction:column;min-height:100dvh}
+    button{
+      min-height:44px;
+      touch-action:manipulation;
+      cursor:pointer;
+      border:0;
+    }
+
+    input{
+      -webkit-appearance:none;
+      appearance:none;
+    }
+
+    .app-shell{
+      width:100%;
+      height:100dvh;
+      display:flex;
+      overflow:hidden;
+      padding-left:var(--safe-left);
+      padding-right:var(--safe-right);
+    }
+
+    .desktop-sidebar{
+      width:18rem;
+      flex:0 0 18rem;
+      background:linear-gradient(180deg,#0b1220 0%,#08101f 100%);
+      overflow-y:auto;
+      -webkit-overflow-scrolling:touch;
+    }
+
+    .main-area{
+      flex:1;
+      min-width:0;
+      height:100dvh;
+      display:flex;
+      flex-direction:column;
+      overflow:hidden;
+    }
 
     .top-header{
-      position:sticky;
-      top:0;
+      position:relative;
       z-index:30;
-      min-height:calc(64px + var(--safe-top));
+      min-height:calc(66px + var(--safe-top));
       padding-top:var(--safe-top);
-      background:rgba(255,255,255,.88);
+      background:rgba(255,255,255,.90);
       backdrop-filter:blur(18px);
       -webkit-backdrop-filter:blur(18px);
-      border-bottom:1px solid rgba(226,232,240,.9);
+      border-bottom:1px solid rgba(226,232,240,.92);
     }
 
     .content-scroll{
       flex:1;
+      min-height:0;
       overflow-y:auto;
+      overflow-x:hidden;
       -webkit-overflow-scrolling:touch;
-      padding-bottom:calc(96px + var(--safe-bottom));
+      padding:24px;
+      padding-bottom:calc(24px + var(--safe-bottom));
     }
 
-    .hero-gradient{background:linear-gradient(135deg,rgba(37,99,235,.96) 0%,rgba(14,165,233,.92) 55%,rgba(6,182,212,.90) 100%)}
-    .glass-card{background:rgba(255,255,255,.88);border:1px solid rgba(226,232,240,.9);box-shadow:0 18px 45px rgba(15,23,42,.07);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
-    .soft-card{background:#fff;border:1px solid rgba(226,232,240,.92);box-shadow:0 14px 34px rgba(15,23,42,.055)}
-    .radar-legend{background:linear-gradient(to right,#22c55e,#eab308,#f97316,#ef4444)}
-    .compass-dial{background:radial-gradient(circle,#ffffff 65%,#f1f5f9 100%)}
-
-    .no-scrollbar::-webkit-scrollbar{display:none}
-    .no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}
-
-    .search-input{
-      min-height:46px;
-      width:100%;
-      border:1px solid #dbe3ee;
-      border-radius:999px;
-      background:#f8fafc;
-      padding:.72rem 1rem .72rem 2.55rem;
-      outline:none;
-      transition:.18s ease;
+    .view-content.hidden{
+      display:none!important;
     }
-    .search-input:focus{border-color:#2563eb;box-shadow:0 0 0 4px rgba(37,99,235,.13);background:#fff}
 
-    .nav-btn.active{background:#2563eb;color:#fff;box-shadow:0 10px 22px rgba(37,99,235,.28)}
+    .hero-gradient{
+      background:linear-gradient(135deg,rgba(37,99,235,.97) 0%,rgba(14,165,233,.93) 55%,rgba(6,182,212,.90) 100%);
+    }
+
+    .soft-card{
+      background:#fff;
+      border:1px solid rgba(226,232,240,.94);
+      box-shadow:0 14px 34px rgba(15,23,42,.055);
+    }
+
+    .nav-btn.active{
+      background:#2563eb;
+      color:#fff;
+      box-shadow:0 10px 22px rgba(37,99,235,.28);
+    }
+
     .nav-btn:not(.active){color:#94a3b8}
-    .nav-btn:not(.active):hover{background:rgba(30,41,59,.7);color:#fff}
+    .nav-btn:not(.active):hover{background:rgba(30,41,59,.70);color:#fff}
 
     .bottom-nav{
       position:fixed;
@@ -875,44 +1384,132 @@
       padding:8px;
       gap:4px;
     }
-    .bottom-nav button{flex:1;min-width:0;border-radius:20px;color:#cbd5e1;font-size:11px;font-weight:700;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;transition:.18s ease}
-    .bottom-nav button i{font-size:18px}.bottom-nav button.active{background:#2563eb;color:#fff}
 
-    .map-box{min-height:320px}.map-full{height:clamp(420px,62dvh,680px)}
-    .leaflet-container{font-family:'Prompt',sans-serif;background:#e2e8f0}
-    .leaflet-control-attribution{font-size:10px!important}
+    .bottom-nav button{
+      flex:1;
+      min-width:0;
+      border-radius:20px;
+      color:#cbd5e1;
+      font-size:11px;
+      font-weight:700;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:4px;
+      transition:.18s ease;
+      background:transparent;
+    }
+
+    .bottom-nav button i{font-size:18px}
+    .bottom-nav button.active{background:#2563eb;color:#fff}
+
+    .search-input{
+      min-height:46px;
+      width:100%;
+      border:1px solid #dbe3ee;
+      border-radius:999px;
+      background:#f8fafc;
+      padding:.72rem 1rem .72rem 2.55rem;
+      outline:none;
+      transition:.18s ease;
+    }
+
+    .search-input:focus{
+      border-color:#2563eb;
+      box-shadow:0 0 0 4px rgba(37,99,235,.13);
+      background:#fff;
+    }
+
+    .no-scrollbar::-webkit-scrollbar{display:none}
+    .no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}
 
     .weather-icon-shadow{filter:drop-shadow(0 10px 20px rgba(0,0,0,.16))}
+    .radar-legend{background:linear-gradient(to right,#22c55e,#eab308,#f97316,#ef4444)}
+    .compass-dial{background:radial-gradient(circle,#ffffff 65%,#f1f5f9 100%)}
+
+    .map-preview{
+      min-height:300px;
+    }
+
+    .map-full{
+      height:clamp(420px,62dvh,680px);
+    }
+
+    .leaflet-container{
+      font-family:'Prompt',sans-serif;
+      background:#e2e8f0;
+    }
+
+    .leaflet-control-attribution{font-size:10px!important}
 
     .toast{
-      position:fixed;z-index:100;left:50%;top:calc(14px + var(--safe-top));transform:translateX(-50%) translateY(-8px);
-      max-width:min(92vw,520px);border-radius:18px;padding:12px 16px;color:#fff;font-size:14px;font-weight:700;
-      box-shadow:0 16px 38px rgba(15,23,42,.28);opacity:0;pointer-events:none;transition:.24s ease;display:flex;align-items:center;gap:10px
+      position:fixed;
+      z-index:100;
+      left:50%;
+      top:calc(14px + var(--safe-top));
+      transform:translateX(-50%) translateY(-8px);
+      max-width:min(92vw,520px);
+      border-radius:18px;
+      padding:12px 16px;
+      color:#fff;
+      font-size:14px;
+      font-weight:700;
+      box-shadow:0 16px 38px rgba(15,23,42,.28);
+      opacity:0;
+      pointer-events:none;
+      transition:.24s ease;
+      display:flex;
+      align-items:center;
+      gap:10px;
     }
-    .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+    .toast.show{
+      opacity:1;
+      transform:translateX(-50%) translateY(0);
+    }
 
     @media(max-width:1023px){
-      .desktop-sidebar{display:none}.bottom-nav{display:flex}.top-header{min-height:calc(68px + var(--safe-top))}
-      .content-scroll{padding:14px 14px calc(98px + var(--safe-bottom))}
+      .desktop-sidebar{display:none!important}
+      .bottom-nav{display:flex}
+      .top-header{min-height:calc(70px + var(--safe-top))}
+      .content-scroll{
+        padding:14px;
+        padding-bottom:calc(98px + var(--safe-bottom));
+      }
     }
-    @media(min-width:1024px){.content-scroll{padding:24px}}
+
     @media(max-width:640px){
-      .hero-temp{font-size:4.8rem;line-height:.95}.hero-title{font-size:1.45rem}.hero-card{padding:1.25rem}.top-header{padding-left:12px;padding-right:12px}
-      .search-input{min-height:44px}.map-box{min-height:280px}.map-full{height:calc(100dvh - 190px)}
+      .hero-temp{font-size:4.7rem;line-height:.95}
+      .hero-title{font-size:1.45rem}
+      .hero-card{padding:1.25rem}
+      .top-header{padding-left:12px;padding-right:12px}
+      .search-input{min-height:44px}
+      .map-preview{min-height:280px}
+      .map-full{height:calc(100dvh - 190px)}
     }
   </style>
 </head>
 
 <body>
-  <div id="toast" class="toast bg-blue-600"><i class="fa-solid fa-circle-info"></i><span id="toastText">ข้อความแจ้งเตือน</span></div>
+  <div id="toast" class="toast bg-blue-600">
+    <i class="fa-solid fa-circle-info"></i>
+    <span id="toastText">ข้อความแจ้งเตือน</span>
+  </div>
 
   <div class="app-shell">
     <aside class="desktop-sidebar text-slate-400 flex-col justify-between shrink-0 hidden lg:flex border-r border-slate-800/50">
       <div>
         <div class="p-6 flex items-center gap-3">
-          <div class="w-11 h-11 bg-blue-600 rounded-2xl flex items-center justify-center text-white text-xl shadow-lg"><i class="fa-solid fa-cloud-sun"></i></div>
-          <div><h1 class="text-white font-extrabold text-xl tracking-tight">WeatherPro</h1><p class="text-[10px] text-slate-500">GAS / Web App Edition</p></div>
+          <div class="w-11 h-11 bg-blue-600 rounded-2xl flex items-center justify-center text-white text-xl shadow-lg">
+            <i class="fa-solid fa-cloud-sun"></i>
+          </div>
+          <div>
+            <h1 class="text-white font-extrabold text-xl tracking-tight">WeatherPro</h1>
+            <p class="text-[10px] text-slate-500">GAS / Web App Edition</p>
+          </div>
         </div>
+
         <nav class="px-4 space-y-1.5">
           <button data-view="overview" onclick="switchView('overview')" class="nav-btn active w-full flex items-center gap-4 px-4 py-3 rounded-xl font-medium transition text-sm"><i class="fa-solid fa-cloud-sun text-lg w-5"></i><span>ภาพรวมวันนี้</span></button>
           <button data-view="hourly" onclick="switchView('hourly')" class="nav-btn w-full flex items-center gap-4 px-4 py-3 rounded-xl transition text-sm"><i class="fa-solid fa-clock text-lg w-5"></i><span>รายชั่วโมง</span></button>
@@ -925,26 +1522,52 @@
           <button data-view="settings" onclick="switchView('settings')" class="nav-btn w-full flex items-center gap-4 px-4 py-3 rounded-xl transition text-sm"><i class="fa-solid fa-cog text-lg w-5"></i><span>ตั้งค่า</span></button>
         </nav>
       </div>
+
       <div class="p-5 border-t border-slate-800/80 bg-[#080d19]/60 space-y-4">
-        <div><span class="text-[10px] text-slate-500 block mb-1">ตำแหน่งปัจจุบัน</span><div class="flex items-center gap-2 text-white font-medium text-sm"><i class="fa-solid fa-location-dot text-blue-500"></i><span id="sideLocationName">กำลังระบุพิกัด...</span></div></div>
-        <div class="flex bg-slate-800 p-1 rounded-xl"><button id="btnC" onclick="switchUnit('C')" class="unit-btn flex-1 py-1.5 text-center text-xs font-bold rounded-lg bg-blue-600 text-white transition">°C</button><button id="btnF" onclick="switchUnit('F')" class="unit-btn flex-1 py-1.5 text-center text-xs font-bold rounded-lg text-slate-400 transition">°F</button></div>
-        <div class="text-[10px] text-slate-500 space-y-2"><p id="updateTimeText">อัปเดตล่าสุด: กำลังโหลด</p><button onclick="shareWeather()" class="w-full py-2.5 bg-blue-600/15 hover:bg-blue-600/25 text-blue-400 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition"><i class="fa-solid fa-share-nodes"></i> แชร์สภาพอากาศ</button></div>
+        <div>
+          <span class="text-[10px] text-slate-500 block mb-1">ตำแหน่งปัจจุบัน</span>
+          <div class="flex items-center gap-2 text-white font-medium text-sm">
+            <i class="fa-solid fa-location-dot text-blue-500"></i>
+            <span id="sideLocationName">กำลังระบุพิกัด...</span>
+          </div>
+        </div>
+        <div class="flex bg-slate-800 p-1 rounded-xl">
+          <button id="btnC" onclick="switchUnit('C')" class="unit-btn flex-1 py-1.5 text-center text-xs font-bold rounded-lg bg-blue-600 text-white transition">°C</button>
+          <button id="btnF" onclick="switchUnit('F')" class="unit-btn flex-1 py-1.5 text-center text-xs font-bold rounded-lg text-slate-400 transition">°F</button>
+        </div>
+        <div class="text-[10px] text-slate-500 space-y-2">
+          <p id="updateTimeText">อัปเดตล่าสุด: กำลังโหลด</p>
+          <button onclick="shareWeather()" class="w-full py-2.5 bg-blue-600/15 hover:bg-blue-600/25 text-blue-400 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition">
+            <i class="fa-solid fa-share-nodes"></i> แชร์สภาพอากาศ
+          </button>
+        </div>
       </div>
     </aside>
 
     <div class="main-area">
       <header class="top-header px-4 sm:px-6 flex items-center justify-between gap-3">
         <div class="flex items-center gap-3 min-w-0 lg:hidden">
-          <div class="w-10 h-10 bg-blue-600 rounded-2xl flex items-center justify-center text-white shadow"><i class="fa-solid fa-cloud-sun"></i></div>
-          <div class="min-w-0"><h1 class="font-extrabold text-slate-900 leading-tight">WeatherPro</h1><p class="text-[11px] text-slate-500 truncate" id="mobileLocationName">กำลังระบุพิกัด...</p></div>
+          <div class="w-10 h-10 bg-blue-600 rounded-2xl flex items-center justify-center text-white shadow">
+            <i class="fa-solid fa-cloud-sun"></i>
+          </div>
+          <div class="min-w-0">
+            <h1 class="font-extrabold text-slate-900 leading-tight">WeatherPro</h1>
+            <p class="text-[11px] text-slate-500 truncate" id="mobileLocationName">กำลังระบุพิกัด...</p>
+          </div>
         </div>
+
         <form onsubmit="searchLocation(event)" class="relative flex-1 max-w-2xl lg:max-w-xl ml-auto">
           <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
           <input type="search" id="searchInput" placeholder="ค้นหาสถานที่ เช่น สกลนคร, โตเกียว..." class="search-input" autocomplete="off" />
         </form>
+
         <div class="flex items-center gap-2 shrink-0">
-          <button onclick="getUserLocation()" class="w-11 h-11 rounded-full bg-slate-100 hover:bg-blue-50 text-blue-600 flex items-center justify-center transition" title="ตำแหน่งปัจจุบัน"><i class="fa-solid fa-location-crosshairs"></i></button>
-          <button onclick="shareWeather()" class="hidden sm:flex w-11 h-11 rounded-full bg-slate-100 hover:bg-blue-50 text-slate-600 items-center justify-center transition" title="แชร์"><i class="fa-solid fa-share-nodes"></i></button>
+          <button onclick="getUserLocation()" class="w-11 h-11 rounded-full bg-slate-100 hover:bg-blue-50 text-blue-600 flex items-center justify-center transition" title="ตำแหน่งปัจจุบัน">
+            <i class="fa-solid fa-location-crosshairs"></i>
+          </button>
+          <button onclick="shareWeather()" class="hidden sm:flex w-11 h-11 rounded-full bg-slate-100 hover:bg-blue-50 text-slate-600 items-center justify-center transition" title="แชร์">
+            <i class="fa-solid fa-share-nodes"></i>
+          </button>
         </div>
       </header>
 
@@ -960,11 +1583,15 @@
                       <h2 id="cityName" class="hero-title text-2xl sm:text-3xl font-extrabold tracking-tight">กำลังโหลดข้อมูล...</h2>
                       <p id="currentDateText" class="text-sm text-white/80 mt-1">กรุณารอสักครู่</p>
                       <div class="flex items-center mt-6 gap-4">
-                        <div><span id="heroTemp" class="hero-temp text-7xl sm:text-8xl font-black tracking-tighter">-</span><span class="text-3xl sm:text-4xl font-medium ml-1">°<span id="heroUnit">C</span></span></div>
+                        <div>
+                          <span id="heroTemp" class="hero-temp text-7xl sm:text-8xl font-black tracking-tighter">-</span>
+                          <span class="text-3xl sm:text-4xl font-medium ml-1">°<span id="heroUnit">C</span></span>
+                        </div>
                         <i id="heroIcon" class="fa-solid fa-spinner fa-spin text-yellow-300 weather-icon-shadow text-5xl sm:text-6xl animate-pulse"></i>
                       </div>
                       <p id="heroCondition" class="text-lg sm:text-xl font-bold mt-3">กำลังประมวลผลสภาพอากาศ</p>
                     </div>
+
                     <div class="flex flex-col gap-4 min-w-0 md:min-w-[310px]">
                       <div class="bg-white/15 backdrop-blur-md rounded-3xl p-4 grid grid-cols-2 gap-4 border border-white/10">
                         <div><span class="text-white/60 block text-xs">ดัชนี UV</span><strong id="heroUV" class="text-lg flex items-center gap-1.5 mt-0.5">-</strong></div>
@@ -983,12 +1610,18 @@
                 </div>
 
                 <div class="soft-card rounded-[2rem] p-5 sm:p-6">
-                  <div class="flex justify-between items-center mb-4"><h3 class="font-extrabold text-lg flex items-center gap-2"><i class="fa-regular fa-clock text-blue-600"></i> รายชั่วโมง</h3><button onclick="switchView('hourly')" class="text-xs text-blue-600 font-bold">ดูทั้งหมด</button></div>
+                  <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-extrabold text-lg flex items-center gap-2"><i class="fa-regular fa-clock text-blue-600"></i> รายชั่วโมง</h3>
+                    <button onclick="switchView('hourly')" class="text-xs text-blue-600 font-bold">ดูทั้งหมด</button>
+                  </div>
                   <div id="hourlyOverview" class="flex gap-3 overflow-x-auto no-scrollbar pb-1 snap-x"></div>
                 </div>
 
                 <div class="soft-card rounded-[2rem] p-5 sm:p-6">
-                  <div class="flex justify-between items-center mb-4"><h3 class="font-extrabold text-lg flex items-center gap-2"><i class="fa-regular fa-calendar-days text-emerald-600"></i> รายวัน 7 วัน</h3><button onclick="switchView('daily')" class="text-xs text-emerald-600 font-bold">รายละเอียด</button></div>
+                  <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-extrabold text-lg flex items-center gap-2"><i class="fa-regular fa-calendar-days text-emerald-600"></i> รายวัน 7 วัน</h3>
+                    <button onclick="switchView('daily')" class="text-xs text-emerald-600 font-bold">รายละเอียด</button>
+                  </div>
                   <div id="dailyOverview" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3"></div>
                 </div>
 
@@ -996,37 +1629,188 @@
                   <h3 class="font-extrabold text-lg flex items-center gap-2 mb-4"><i class="fa-solid fa-chart-line text-blue-600"></i> แนวโน้มอุณหภูมิ</h3>
                   <div class="h-64 relative"><canvas id="tempTrendChart"></canvas></div>
                 </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div class="soft-card rounded-[2rem] p-5 sm:p-6">
+                    <h3 class="font-extrabold text-lg mb-4"><i class="fa-solid fa-compass text-blue-600"></i> ลมปัจจุบัน</h3>
+                    <div class="flex flex-col sm:flex-row items-center justify-center gap-6 py-2">
+                      <div class="w-32 h-32 rounded-full border-4 border-slate-200 relative flex items-center justify-center shadow-inner compass-dial shrink-0">
+                        <span class="absolute top-2 text-[10px] font-bold text-slate-500">N</span>
+                        <span class="absolute right-3 text-[10px] font-bold text-slate-500">E</span>
+                        <span class="absolute bottom-2 text-[10px] font-bold text-slate-500">S</span>
+                        <span class="absolute left-3 text-[10px] font-bold text-slate-500">W</span>
+                        <div id="windNeedle" class="w-2.5 h-20 bg-gradient-to-b from-blue-600 to-transparent rounded-full relative transition-transform duration-700">
+                          <div class="w-4 h-4 bg-white border-2 border-blue-600 rounded-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
+                        </div>
+                      </div>
+                      <div class="space-y-1 text-center sm:text-left text-sm">
+                        <p class="text-slate-500">ความเร็วลม: <strong id="windNow" class="text-slate-800">-</strong></p>
+                        <p class="text-slate-500">ทิศทางลม: <strong id="windDir" class="text-slate-800">-</strong></p>
+                        <p class="text-slate-500">สูงสุดวันนี้: <strong id="windMax" class="text-slate-800">-</strong></p>
+                        <p class="text-xs text-emerald-600 font-bold mt-2" id="windStatusMsg"><i class="fa-solid fa-circle-check"></i> กำลังประมวลผล</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="soft-card rounded-[2rem] p-5 sm:p-6">
+                    <h3 class="font-extrabold text-lg mb-4"><i class="fa-solid fa-droplet text-blue-600"></i> โอกาสเกิดฝนสูงสุดวันนี้</h3>
+                    <div class="flex items-center gap-6 py-2">
+                      <div class="text-center sm:text-left w-24 shrink-0">
+                        <h4 class="text-4xl font-extrabold text-blue-600"><span id="rainAmount">-</span> <span class="text-xs text-slate-500">%</span></h4>
+                        <p class="text-[11px] text-slate-400">อัตราความเสี่ยง</p>
+                      </div>
+                      <div class="flex-1 h-28 flex items-end gap-1 border-b border-slate-100">
+                        <div class="w-1/4 bg-blue-100 h-[20%] rounded-t"></div>
+                        <div class="w-1/4 bg-blue-200 h-[40%] rounded-t"></div>
+                        <div class="w-1/4 bg-blue-300 h-[60%] rounded-t"></div>
+                        <div id="rainBarDynamic" class="w-1/4 bg-blue-500 h-[10%] rounded-t transition-all"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <div class="xl:col-span-4 space-y-6">
                 <div class="soft-card rounded-[2rem] p-5 sm:p-6 h-[380px] flex flex-col">
-                  <div class="flex items-center justify-between mb-3"><h3 class="font-extrabold text-lg"><i class="fa-solid fa-map-location-dot text-red-500"></i> แผนที่ตำแหน่ง</h3><button onclick="switchView('radar')" class="text-xs text-blue-600 font-bold">เต็มจอ</button></div>
-                  <div class="flex-1 rounded-3xl overflow-hidden border border-slate-200"><div id="previewMap" class="w-full h-full map-box flex items-center justify-center"><i class="fa-solid fa-spinner fa-spin text-slate-300 text-3xl"></i></div></div>
-                  <div class="mt-3"><div class="h-2 rounded-full radar-legend"></div><div class="flex justify-between text-[10px] text-slate-400 mt-1"><span>ฝนเบา</span><span>ฝนหนัก</span></div></div>
+                  <div class="flex items-center justify-between mb-3">
+                    <h3 class="font-extrabold text-lg"><i class="fa-solid fa-map-location-dot text-red-500"></i> แผนที่ตำแหน่ง</h3>
+                    <button onclick="switchView('radar')" class="text-xs text-blue-600 font-bold">เต็มจอ</button>
+                  </div>
+                  <div class="flex-1 rounded-3xl overflow-hidden border border-slate-200">
+                    <div id="previewMap" class="w-full h-full map-preview flex items-center justify-center"><i class="fa-solid fa-spinner fa-spin text-slate-300 text-3xl"></i></div>
+                  </div>
+                  <div class="mt-3">
+                    <div class="h-2 rounded-full radar-legend"></div>
+                    <div class="flex justify-between text-[10px] text-slate-400 mt-1"><span>ฝนเบา</span><span>ฝนหนัก</span></div>
+                  </div>
                 </div>
 
                 <div class="soft-card rounded-[2rem] p-5 sm:p-6">
-                  <div class="flex items-center justify-between mb-4"><h3 class="font-extrabold text-lg"><i class="fa-solid fa-wind text-emerald-500"></i> คุณภาพอากาศ</h3><button onclick="switchView('aqi')" class="text-xs text-emerald-600 font-bold">ดูเพิ่ม</button></div>
+                  <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-extrabold text-lg"><i class="fa-solid fa-wind text-emerald-500"></i> คุณภาพอากาศ</h3>
+                    <button onclick="switchView('aqi')" class="text-xs text-emerald-600 font-bold">ดูเพิ่ม</button>
+                  </div>
                   <div class="flex items-center gap-5 bg-slate-50 p-4 rounded-3xl">
-                    <div class="relative w-20 h-20 shrink-0"><svg class="w-full h-full -rotate-90"><circle cx="40" cy="40" r="32" stroke="#e2e8f0" stroke-width="7" fill="transparent"/><circle id="aqiCircle" cx="40" cy="40" r="32" stroke="#22c55e" stroke-width="7" stroke-dasharray="201" stroke-dashoffset="100" fill="transparent" stroke-linecap="round"/></svg><div class="absolute inset-0 flex flex-col items-center justify-center"><strong id="aqiScore" class="text-2xl font-black">-</strong><span id="aqiRating" class="text-[10px] text-emerald-500 font-bold">ดี</span></div></div>
+                    <div class="relative w-20 h-20 shrink-0">
+                      <svg class="w-full h-full -rotate-90"><circle cx="40" cy="40" r="32" stroke="#e2e8f0" stroke-width="7" fill="transparent"/><circle id="aqiCircle" cx="40" cy="40" r="32" stroke="#22c55e" stroke-width="7" stroke-dasharray="201" stroke-dashoffset="100" fill="transparent" stroke-linecap="round"/></svg>
+                      <div class="absolute inset-0 flex flex-col items-center justify-center"><strong id="aqiScore" class="text-2xl font-black">-</strong><span id="aqiRating" class="text-[10px] text-emerald-500 font-bold">ดี</span></div>
+                    </div>
                     <div><h4 id="aqiDesc" class="font-bold">AQI โดยประมาณ</h4><p class="text-xs text-slate-500 mt-1">ประเมินจากพื้นที่ใกล้เคียง</p></div>
                   </div>
-                  <div class="grid grid-cols-2 gap-3 text-xs mt-4"><div class="bg-slate-50 p-3 rounded-2xl flex justify-between"><span>PM2.5</span><strong id="pm25Val">-</strong></div><div class="bg-slate-50 p-3 rounded-2xl flex justify-between"><span>PM10</span><strong id="pm10Val">-</strong></div></div>
+                  <div class="grid grid-cols-2 gap-3 text-xs mt-4">
+                    <div class="bg-slate-50 p-3 rounded-2xl flex justify-between"><span>PM2.5</span><strong id="pm25Val">-</strong></div>
+                    <div class="bg-slate-50 p-3 rounded-2xl flex justify-between"><span>PM10</span><strong id="pm10Val">-</strong></div>
+                  </div>
                 </div>
 
-                <div class="soft-card rounded-[2rem] p-5 sm:p-6"><h3 class="font-extrabold text-lg mb-4"><i class="fa-solid fa-sun text-yellow-500"></i> ดวงอาทิตย์</h3><div class="grid grid-cols-2 gap-3"><div class="bg-slate-50 p-4 rounded-2xl"><span class="text-xs text-slate-500 block">ขึ้นเวลา</span><strong id="sunriseTime">-</strong></div><div class="bg-slate-50 p-4 rounded-2xl"><span class="text-xs text-slate-500 block">ตกเวลา</span><strong id="sunsetTime">-</strong></div></div><p id="dayLengthText" class="text-xs text-slate-500 mt-3">ความยาวกลางวัน: -</p></div>
+                <div class="soft-card rounded-[2rem] p-5 sm:p-6">
+                  <h3 class="font-extrabold text-lg mb-4"><i class="fa-solid fa-sun text-yellow-500"></i> ดวงอาทิตย์</h3>
+                  <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-slate-50 p-4 rounded-2xl"><span class="text-xs text-slate-500 block">ขึ้นเวลา</span><strong id="sunriseTime">-</strong></div>
+                    <div class="bg-slate-50 p-4 rounded-2xl"><span class="text-xs text-slate-500 block">ตกเวลา</span><strong id="sunsetTime">-</strong></div>
+                  </div>
+                  <p id="dayLengthText" class="text-xs text-slate-500 mt-3">ความยาวกลางวัน: -</p>
+                </div>
               </div>
             </div>
           </section>
 
-          <section id="view-hourly" class="view-content hidden"><div class="soft-card rounded-[2rem] p-5 sm:p-6"><h2 class="text-2xl font-extrabold mb-2"><i class="fa-solid fa-clock text-blue-600"></i> พยากรณ์รายชั่วโมง</h2><p class="text-sm text-slate-500 mb-5">ข้อมูล 24 ชั่วโมงถัดไป</p><div id="hourlyFull" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4"></div></div></section>
-          <section id="view-daily" class="view-content hidden"><div class="soft-card rounded-[2rem] p-5 sm:p-6"><h2 class="text-2xl font-extrabold mb-2"><i class="fa-solid fa-calendar-days text-emerald-600"></i> พยากรณ์รายวัน</h2><p class="text-sm text-slate-500 mb-5">แนวโน้ม 7 วันข้างหน้า</p><div id="dailyFull" class="space-y-4"></div></div></section>
-          <section id="view-radar" class="view-content hidden"><div class="soft-card rounded-[2rem] p-5 sm:p-6"><div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4"><div><h2 class="text-2xl font-extrabold"><i class="fa-solid fa-satellite-dish text-red-500"></i> แผนที่ระบบเรดาร์</h2><p class="text-sm text-slate-500">ย่อ ขยาย และดูพื้นที่ตำแหน่งปัจจุบัน</p></div><button onclick="resetRadarMap()" class="bg-blue-600 text-white px-4 py-2 rounded-2xl text-sm font-bold">กลับศูนย์กลาง</button></div><div class="map-full rounded-3xl overflow-hidden border border-slate-200 relative"><div id="fullscreenRadarMap" class="w-full h-full flex items-center justify-center"><i class="fa-solid fa-spinner fa-spin text-slate-300 text-4xl"></i></div><div class="absolute bottom-4 left-4 right-4 sm:right-auto sm:w-72 bg-white/95 backdrop-blur p-4 rounded-3xl shadow-xl z-[999]"><strong class="text-sm">ความแรงของกลุ่มเมฆฝน</strong><div class="h-3 rounded-full radar-legend mt-2"></div><div class="flex justify-between text-[10px] text-slate-400 mt-1"><span>เบาบาง</span><span>หนักมาก</span></div></div></div></div></section>
-          <section id="view-aqi" class="view-content hidden"><div class="soft-card rounded-[2rem] p-5 sm:p-6"><h2 class="text-2xl font-extrabold mb-2"><i class="fa-solid fa-wind text-teal-600"></i> คุณภาพอากาศ</h2><p class="text-sm text-slate-500 mb-5">ข้อมูล AQI เป็นค่าประเมินเบื้องต้น</p><div class="grid grid-cols-1 lg:grid-cols-3 gap-5"><div class="bg-slate-50 rounded-3xl p-6 text-center flex flex-col items-center"><strong id="aqiFullScore" class="text-7xl font-black text-slate-800">-</strong><span id="aqiTextSub" class="text-emerald-600 font-bold">ดี</span><p class="text-xs text-slate-500 mt-3">เหมาะกับกิจกรรมกลางแจ้ง</p></div><div class="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4"><div class="bg-slate-50 p-5 rounded-3xl"><span class="text-xs text-slate-500">PM2.5</span><strong id="aqiPM25" class="block text-3xl mt-2">-</strong></div><div class="bg-slate-50 p-5 rounded-3xl"><span class="text-xs text-slate-500">PM10</span><strong id="aqiPM10" class="block text-3xl mt-2">-</strong></div><div class="bg-slate-50 p-5 rounded-3xl"><span class="text-xs text-slate-500">O₃</span><strong id="aqiO3" class="block text-3xl mt-2">24 ppb</strong></div><div class="bg-slate-50 p-5 rounded-3xl"><span class="text-xs text-slate-500">NO₂</span><strong id="aqiNO2" class="block text-3xl mt-2">9 ppb</strong></div></div></div></div></section>
-          <section id="view-astronomy" class="view-content hidden"><div class="soft-card rounded-[2rem] p-5 sm:p-6"><h2 class="text-2xl font-extrabold mb-2"><i class="fa-solid fa-moon text-indigo-600"></i> ดวงอาทิตย์และดวงจันทร์</h2><p class="text-sm text-slate-500 mb-5">เวลาขึ้นและตกตามพิกัดปัจจุบัน</p><div class="grid grid-cols-1 md:grid-cols-2 gap-5"><div class="bg-slate-50 rounded-3xl p-6 text-center"><i class="fa-solid fa-sun text-yellow-500 text-6xl mb-4"></i><h3 class="font-extrabold text-lg">ดวงอาทิตย์</h3><div class="grid grid-cols-2 gap-3 mt-4"><div class="bg-white p-4 rounded-2xl"><span class="text-xs text-slate-500">ขึ้น</span><strong id="astroSunrise" class="block text-xl">-</strong></div><div class="bg-white p-4 rounded-2xl"><span class="text-xs text-slate-500">ตก</span><strong id="astroSunset" class="block text-xl">-</strong></div></div></div><div class="bg-slate-50 rounded-3xl p-6 text-center"><i class="fa-solid fa-moon text-indigo-500 text-6xl mb-4"></i><h3 class="font-extrabold text-lg">ดวงจันทร์</h3><div class="grid grid-cols-2 gap-3 mt-4"><div class="bg-white p-4 rounded-2xl"><span class="text-xs text-slate-500">ขึ้น</span><strong class="block text-xl">18:45 น.</strong></div><div class="bg-white p-4 rounded-2xl"><span class="text-xs text-slate-500">ตก</span><strong class="block text-xl">06:15 น.</strong></div></div></div></div></div></section>
-          <section id="view-alerts" class="view-content hidden"><div class="soft-card rounded-[2rem] p-5 sm:p-6"><h2 class="text-2xl font-extrabold mb-2"><i class="fa-solid fa-triangle-exclamation text-amber-500"></i> แจ้งเตือนสภาพอากาศ</h2><p class="text-sm text-slate-500 mb-5">ระบบแจ้งเตือนจากข้อมูลพยากรณ์ในพื้นที่</p><div id="alertContainer"></div></div></section>
-          <section id="view-history" class="view-content hidden"><div class="soft-card rounded-[2rem] p-5 sm:p-6"><h2 class="text-2xl font-extrabold mb-2"><i class="fa-solid fa-chart-bar text-blue-600"></i> สถิติเปรียบเทียบ</h2><p class="text-sm text-slate-500 mb-5">เปรียบเทียบอุณหภูมิและความเร็วลมรายชั่วโมง</p><div class="h-[420px] relative"><canvas id="historicalCompareChart"></canvas></div></div></section>
-          <section id="view-settings" class="view-content hidden"><div class="soft-card rounded-[2rem] p-5 sm:p-6 max-w-2xl mx-auto"><h2 class="text-2xl font-extrabold mb-2"><i class="fa-solid fa-cog text-slate-600"></i> ตั้งค่าระบบ</h2><p class="text-sm text-slate-500 mb-5">ตั้งค่าแอปและการแสดงผล</p><div class="flex items-center justify-between gap-4 py-4 border-b"><div><h4 class="font-bold">หน่วยอุณหภูมิ</h4><p class="text-xs text-slate-500">เลือก Celsius หรือ Fahrenheit</p></div><div class="flex bg-slate-100 p-1 rounded-xl w-32"><button id="setBtnC" onclick="switchUnit('C')" class="unit-btn flex-1 py-2 text-xs font-bold rounded-lg bg-blue-600 text-white">°C</button><button id="setBtnF" onclick="switchUnit('F')" class="unit-btn flex-1 py-2 text-xs font-bold rounded-lg text-slate-500">°F</button></div></div><div class="mt-5 p-4 bg-emerald-50 border border-emerald-100 rounded-3xl text-sm text-emerald-800"><strong><i class="fa-solid fa-check-circle"></i> รองรับ iOS และ Google Apps Script</strong><p class="text-xs mt-1">ปรับ safe-area, bottom navigation, font-size 16px และ fallback ตำแหน่งเรียบร้อย</p></div></div></section>
+          <section id="view-hourly" class="view-content hidden">
+            <div class="soft-card rounded-[2rem] p-5 sm:p-6">
+              <h2 class="text-2xl font-extrabold mb-2"><i class="fa-solid fa-clock text-blue-600"></i> พยากรณ์รายชั่วโมง</h2>
+              <p class="text-sm text-slate-500 mb-5">ข้อมูล 24 ชั่วโมงถัดไป</p>
+              <div id="hourlyFull" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4"></div>
+            </div>
+          </section>
+
+          <section id="view-daily" class="view-content hidden">
+            <div class="soft-card rounded-[2rem] p-5 sm:p-6">
+              <h2 class="text-2xl font-extrabold mb-2"><i class="fa-solid fa-calendar-days text-emerald-600"></i> พยากรณ์รายวัน</h2>
+              <p class="text-sm text-slate-500 mb-5">แนวโน้ม 7 วันข้างหน้า</p>
+              <div id="dailyFull" class="space-y-4"></div>
+            </div>
+          </section>
+
+          <section id="view-radar" class="view-content hidden">
+            <div class="soft-card rounded-[2rem] p-5 sm:p-6">
+              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+                <div>
+                  <h2 class="text-2xl font-extrabold"><i class="fa-solid fa-satellite-dish text-red-500"></i> แผนที่ระบบเรดาร์</h2>
+                  <p class="text-sm text-slate-500">ย่อ ขยาย และดูพื้นที่ตำแหน่งปัจจุบัน</p>
+                </div>
+                <button onclick="resetRadarMap()" class="bg-blue-600 text-white px-4 py-2 rounded-2xl text-sm font-bold">กลับศูนย์กลาง</button>
+              </div>
+              <div class="map-full rounded-3xl overflow-hidden border border-slate-200 relative">
+                <div id="fullscreenRadarMap" class="w-full h-full flex items-center justify-center"><i class="fa-solid fa-spinner fa-spin text-slate-300 text-4xl"></i></div>
+                <div class="absolute bottom-4 left-4 right-4 sm:right-auto sm:w-72 bg-white/95 backdrop-blur p-4 rounded-3xl shadow-xl z-[999]">
+                  <strong class="text-sm">ความแรงของกลุ่มเมฆฝน</strong>
+                  <div class="h-3 rounded-full radar-legend mt-2"></div>
+                  <div class="flex justify-between text-[10px] text-slate-400 mt-1"><span>เบาบาง</span><span>หนักมาก</span></div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section id="view-aqi" class="view-content hidden">
+            <div class="soft-card rounded-[2rem] p-5 sm:p-6">
+              <h2 class="text-2xl font-extrabold mb-2"><i class="fa-solid fa-wind text-teal-600"></i> คุณภาพอากาศ</h2>
+              <p class="text-sm text-slate-500 mb-5">ข้อมูล AQI เป็นค่าประเมินเบื้องต้น</p>
+              <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+                <div class="bg-slate-50 rounded-3xl p-6 text-center flex flex-col items-center"><strong id="aqiFullScore" class="text-7xl font-black text-slate-800">-</strong><span id="aqiTextSub" class="text-emerald-600 font-bold">ดี</span><p class="text-xs text-slate-500 mt-3">เหมาะกับกิจกรรมกลางแจ้ง</p></div>
+                <div class="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div class="bg-slate-50 p-5 rounded-3xl"><span class="text-xs text-slate-500">PM2.5</span><strong id="aqiPM25" class="block text-3xl mt-2">-</strong></div>
+                  <div class="bg-slate-50 p-5 rounded-3xl"><span class="text-xs text-slate-500">PM10</span><strong id="aqiPM10" class="block text-3xl mt-2">-</strong></div>
+                  <div class="bg-slate-50 p-5 rounded-3xl"><span class="text-xs text-slate-500">O₃</span><strong id="aqiO3" class="block text-3xl mt-2">24 ppb</strong></div>
+                  <div class="bg-slate-50 p-5 rounded-3xl"><span class="text-xs text-slate-500">NO₂</span><strong id="aqiNO2" class="block text-3xl mt-2">9 ppb</strong></div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section id="view-astronomy" class="view-content hidden">
+            <div class="soft-card rounded-[2rem] p-5 sm:p-6">
+              <h2 class="text-2xl font-extrabold mb-2"><i class="fa-solid fa-moon text-indigo-600"></i> ดวงอาทิตย์และดวงจันทร์</h2>
+              <p class="text-sm text-slate-500 mb-5">เวลาขึ้นและตกตามพิกัดปัจจุบัน</p>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div class="bg-slate-50 rounded-3xl p-6 text-center"><i class="fa-solid fa-sun text-yellow-500 text-6xl mb-4"></i><h3 class="font-extrabold text-lg">ดวงอาทิตย์</h3><div class="grid grid-cols-2 gap-3 mt-4"><div class="bg-white p-4 rounded-2xl"><span class="text-xs text-slate-500">ขึ้น</span><strong id="astroSunrise" class="block text-xl">-</strong></div><div class="bg-white p-4 rounded-2xl"><span class="text-xs text-slate-500">ตก</span><strong id="astroSunset" class="block text-xl">-</strong></div></div></div>
+                <div class="bg-slate-50 rounded-3xl p-6 text-center"><i class="fa-solid fa-moon text-indigo-500 text-6xl mb-4"></i><h3 class="font-extrabold text-lg">ดวงจันทร์</h3><div class="grid grid-cols-2 gap-3 mt-4"><div class="bg-white p-4 rounded-2xl"><span class="text-xs text-slate-500">ขึ้น</span><strong class="block text-xl">18:45 น.</strong></div><div class="bg-white p-4 rounded-2xl"><span class="text-xs text-slate-500">ตก</span><strong class="block text-xl">06:15 น.</strong></div></div></div>
+              </div>
+            </div>
+          </section>
+
+          <section id="view-alerts" class="view-content hidden">
+            <div class="soft-card rounded-[2rem] p-5 sm:p-6">
+              <h2 class="text-2xl font-extrabold mb-2"><i class="fa-solid fa-triangle-exclamation text-amber-500"></i> แจ้งเตือนสภาพอากาศ</h2>
+              <p class="text-sm text-slate-500 mb-5">ระบบแจ้งเตือนจากข้อมูลพยากรณ์ในพื้นที่</p>
+              <div id="alertContainer"></div>
+            </div>
+          </section>
+
+          <section id="view-history" class="view-content hidden">
+            <div class="soft-card rounded-[2rem] p-5 sm:p-6">
+              <h2 class="text-2xl font-extrabold mb-2"><i class="fa-solid fa-chart-bar text-blue-600"></i> สถิติเปรียบเทียบ</h2>
+              <p class="text-sm text-slate-500 mb-5">เปรียบเทียบอุณหภูมิและความเร็วลมรายชั่วโมง</p>
+              <div class="h-[420px] relative"><canvas id="historicalCompareChart"></canvas></div>
+            </div>
+          </section>
+
+          <section id="view-settings" class="view-content hidden">
+            <div class="soft-card rounded-[2rem] p-5 sm:p-6 max-w-2xl mx-auto">
+              <h2 class="text-2xl font-extrabold mb-2"><i class="fa-solid fa-cog text-slate-600"></i> ตั้งค่าระบบ</h2>
+              <p class="text-sm text-slate-500 mb-5">ตั้งค่าแอปและการแสดงผล</p>
+              <div class="flex items-center justify-between gap-4 py-4 border-b">
+                <div><h4 class="font-bold">หน่วยอุณหภูมิ</h4><p class="text-xs text-slate-500">เลือก Celsius หรือ Fahrenheit</p></div>
+                <div class="flex bg-slate-100 p-1 rounded-xl w-32">
+                  <button id="setBtnC" onclick="switchUnit('C')" class="unit-btn flex-1 py-2 text-xs font-bold rounded-lg bg-blue-600 text-white">°C</button>
+                  <button id="setBtnF" onclick="switchUnit('F')" class="unit-btn flex-1 py-2 text-xs font-bold rounded-lg text-slate-500">°F</button>
+                </div>
+              </div>
+              <div class="mt-5 p-4 bg-emerald-50 border border-emerald-100 rounded-3xl text-sm text-emerald-800">
+                <strong><i class="fa-solid fa-check-circle"></i> รองรับ iOS และ Google Apps Script</strong>
+                <p class="text-xs mt-1">ปรับ safe-area, bottom navigation, font-size 16px และ fallback ตำแหน่งเรียบร้อย</p>
+              </div>
+            </div>
+          </section>
         </div>
       </main>
     </div>
@@ -1052,27 +1836,72 @@
     let fullCircle = null;
 
     const fallbackData = {
-      name:'กรุงเทพมหานคร', country:'ประเทศไทย', temp:32, maxTemp:34, minTemp:26, condition:'มีเมฆบางส่วน', feelsLike:36, uv:7, rainChance:20, humidity:65, windSpeed:12, windDir:'NE (ตะวันออกเฉียงเหนือ)', windDegree:45, windMax:20, pressure:1010, visibility:10, aqi:42, pm25:12, pm10:28, sunrise:'06:00 น.', sunset:'18:30 น.', icon:'fa-cloud-sun', coords:[13.7563,100.5018], hourly:[], daily:[]
+      name:'กรุงเทพมหานคร',
+      country:'ประเทศไทย',
+      temp:32,
+      maxTemp:34,
+      minTemp:26,
+      condition:'มีเมฆบางส่วน',
+      feelsLike:36,
+      uv:7,
+      rainChance:20,
+      humidity:65,
+      windSpeed:12,
+      windDir:'NE (ตะวันออกเฉียงเหนือ)',
+      windDegree:45,
+      windMax:20,
+      pressure:1010,
+      visibility:10,
+      aqi:42,
+      pm25:12,
+      pm10:28,
+      sunrise:'06:00 น.',
+      sunset:'18:30 น.',
+      icon:'fa-cloud-sun',
+      coords:[13.7563,100.5018],
+      hourly:[],
+      daily:[]
     };
 
     document.addEventListener('DOMContentLoaded', () => {
       buildFallbackLists();
+      switchView('overview', false);
       getUserLocation();
     });
 
     function buildFallbackLists(){
       const hours = ['ตอนนี้','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00','21:00','22:00','23:00','00:00','01:00','02:00','03:00','04:00','05:00','06:00','07:00','08:00'];
-      fallbackData.hourly = hours.map((h,i)=>({time:h,temp:32 + Math.round(Math.sin(i/4)*2),icon:i%5===0?'fa-cloud-showers-heavy':'fa-cloud-sun',rain:(i%5===0?45:20)+'%',wind:(12+i%7)+' km/h'}));
+      fallbackData.hourly = hours.map((h,i)=>({
+        time:h,
+        temp:32 + Math.round(Math.sin(i/4)*2),
+        icon:i%5===0?'fa-cloud-showers-heavy':'fa-cloud-sun',
+        rain:(i%5===0?45:20)+'%',
+        wind:(12+i%7)+' km/h'
+      }));
       const days = ['วันนี้','พรุ่งนี้','พุธ','พฤหัสบดี','ศุกร์','เสาร์','อาทิตย์'];
-      fallbackData.daily = days.map((d,i)=>({day:d,date:(20+i)+' พ.ค.',tempMax:34-i%3,tempMin:25+i%2,icon:i%3===0?'fa-cloud-showers-heavy':'fa-cloud-sun',rain:(20+i*8)+'%'}));
+      fallbackData.daily = days.map((d,i)=>({
+        day:d,
+        date:(20+i)+' พ.ค.',
+        tempMax:34-i%3,
+        tempMin:25+i%2,
+        icon:i%3===0?'fa-cloud-showers-heavy':'fa-cloud-sun',
+        rain:(20+i*8)+'%'
+      }));
     }
 
     function showToast(message,type='info'){
       const toast = document.getElementById('toast');
-      document.getElementById('toastText').textContent = message;
+      const text = document.getElementById('toastText');
+      if(!toast || !text) return;
+      text.textContent = message;
       toast.className = `toast ${type==='error'?'bg-red-500':'bg-blue-600'} show`;
       clearTimeout(showToast.timer);
       showToast.timer = setTimeout(()=>toast.classList.remove('show'),3200);
+    }
+
+    function setLoadingTitle(text){
+      const el = document.getElementById('cityName');
+      if(el) el.innerHTML = `${text} <i class='fa-solid fa-spinner fa-spin text-base ml-1'></i>`;
     }
 
     function getUserLocation(){
@@ -1084,19 +1913,25 @@
           () => fetchLocationByIP(),
           {enableHighAccuracy:false,timeout:6500,maximumAge:600000}
         );
-      }else fetchLocationByIP();
+      }else{
+        fetchLocationByIP();
+      }
     }
 
     async function fetchLocationByIP(){
       try{
         showToast('กำลังระบุตำแหน่งจาก IP Address...');
         const res = await fetch('https://get.geojs.io/v1/ip/geo.json');
+        if(!res.ok) throw new Error('IP location failed');
         const data = await res.json();
         if(data && data.latitude && data.longitude){
           const name = data.city ? `${data.city}, ${data.country}` : null;
           await fetchWeather(parseFloat(data.latitude),parseFloat(data.longitude),name);
-        }else throw new Error('No IP location');
+        }else{
+          throw new Error('No IP location');
+        }
       }catch(e){
+        console.warn(e);
         showToast('ไม่สามารถระบุตำแหน่งได้ ใช้ข้อมูลจำลองแทน','error');
         initApp(fallbackData);
       }
@@ -1106,89 +1941,195 @@
       try{
         let locationName = customName || `พิกัด ${lat.toFixed(2)}, ${lon.toFixed(2)}`;
         let countryName = 'ระบุพิกัดแล้ว';
+
         if(customName && customName.includes(',')){
-          const parts = customName.split(','); locationName = parts[0].trim(); countryName = parts.slice(1).join(',').trim();
+          const parts = customName.split(',');
+          locationName = parts[0].trim();
+          countryName = parts.slice(1).join(',').trim() || countryName;
         }else if(!customName){
           try{
             const geo = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&accept-language=th`);
-            const geoData = await geo.json();
-            if(geoData && geoData.address){
-              locationName = geoData.address.city || geoData.address.state || geoData.address.province || geoData.address.town || geoData.address.village || 'ตำแหน่งปัจจุบัน';
-              countryName = geoData.address.country || countryName;
+            if(geo.ok){
+              const geoData = await geo.json();
+              if(geoData && geoData.address){
+                locationName = geoData.address.city || geoData.address.state || geoData.address.province || geoData.address.town || geoData.address.village || 'ตำแหน่งปัจจุบัน';
+                countryName = geoData.address.country || countryName;
+              }
             }
-          }catch(e){}
+          }catch(e){
+            console.warn('Reverse geocode failed', e);
+          }
         }
 
-        const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&hourly=temperature_2m,relativehumidity_2m,precipitation_probability,windspeed_10m,weathercode,visibility,surface_pressure&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,weathercode,sunrise,sunset,uv_index_max&timezone=auto`;
+        const params = new URLSearchParams({
+          latitude:String(lat),
+          longitude:String(lon),
+          current:'temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,surface_pressure,wind_speed_10m,wind_direction_10m',
+          hourly:'temperature_2m,relative_humidity_2m,precipitation_probability,wind_speed_10m,weather_code,visibility,surface_pressure',
+          daily:'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset,uv_index_max',
+          timezone:'auto'
+        });
+        const url = `https://api.open-meteo.com/v1/forecast?${params.toString()}`;
         const res = await fetch(url);
-        if(!res.ok) throw new Error('weather failed');
+        if(!res.ok) throw new Error(`weather failed: ${res.status}`);
         const w = await res.json();
-        const cur = w.current_weather, h = w.hourly, d = w.daily;
-        const nowIndexRaw = h.time.findIndex(t => new Date(t) >= new Date());
-        const idx0 = nowIndexRaw < 0 ? 0 : nowIndexRaw;
-        const meta = weatherMeta(cur.weathercode);
-        const data = {
-          name:locationName,country:countryName,temp:Math.round(cur.temperature),maxTemp:Math.round(d.temperature_2m_max[0]),minTemp:Math.round(d.temperature_2m_min[0]),condition:meta.desc,feelsLike:Math.round(cur.temperature + ((h.relativehumidity_2m[idx0]||50)>60?2:0)),uv:Math.round(d.uv_index_max[0]||0),rainChance:d.precipitation_probability_max[0]||0,humidity:h.relativehumidity_2m[idx0]||0,windSpeed:Math.round(cur.windspeed),windDir:windDirection(cur.winddirection),windDegree:cur.winddirection,windMax:Math.max(...h.windspeed_10m.slice(idx0,idx0+24).map(v=>Math.round(v))),pressure:Math.round(h.surface_pressure[idx0]||1010),visibility:Math.round((h.visibility[idx0]||10000)/1000),aqi:Math.floor(Math.random()*46)+15,pm25:Math.floor(Math.random()*20)+5,pm10:Math.floor(Math.random()*40)+10,sunrise:new Date(d.sunrise[0]).toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'})+' น.',sunset:new Date(d.sunset[0]).toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'})+' น.',icon:meta.icon,coords:[lat,lon],hourly:[],daily:[]
-        };
-        for(let i=0;i<24;i++){
-          const idx = idx0+i; if(idx>=h.time.length) break;
-          const hm = weatherMeta(h.weathercode[idx]);
-          data.hourly.push({time:i===0?'ตอนนี้':new Date(h.time[idx]).getHours()+':00',temp:Math.round(h.temperature_2m[idx]),icon:hm.icon,rain:(h.precipitation_probability[idx]||0)+'%',wind:Math.round(h.windspeed_10m[idx])+' km/h'});
+
+        const cur = w.current || {};
+        const h = w.hourly || {};
+        const d = w.daily || {};
+        const hTime = h.time || [];
+        const hTemp = h.temperature_2m || [];
+        const hHum = h.relative_humidity_2m || [];
+        const hRain = h.precipitation_probability || [];
+        const hWind = h.wind_speed_10m || [];
+        const hCode = h.weather_code || [];
+        const hVis = h.visibility || [];
+        const hPress = h.surface_pressure || [];
+        const dCode = d.weather_code || [];
+
+        if(!hTime.length || !hTemp.length || !d.temperature_2m_max || !d.temperature_2m_min){
+          throw new Error('weather data incomplete');
         }
+
+        const nowIndexRaw = hTime.findIndex(t => new Date(t) >= new Date());
+        const idx0 = nowIndexRaw < 0 ? 0 : nowIndexRaw;
+        const currentTemp = safeNum(cur.temperature_2m, hTemp[idx0] ?? 0);
+        const currentCode = safeNum(cur.weather_code, hCode[idx0] ?? 0);
+        const currentWind = safeNum(cur.wind_speed_10m, hWind[idx0] ?? 0);
+        const currentWindDir = safeNum(cur.wind_direction_10m, 0);
+        const currentHum = safeNum(cur.relative_humidity_2m, hHum[idx0] ?? 0);
+        const currentPress = safeNum(cur.surface_pressure, hPress[idx0] ?? 1010);
+        const currentFeels = safeNum(cur.apparent_temperature, currentTemp + (currentHum > 60 ? 2 : 0));
+        const meta = weatherMeta(currentCode);
+
+        const data = {
+          name:locationName,
+          country:countryName,
+          temp:Math.round(currentTemp),
+          maxTemp:Math.round(safeNum(d.temperature_2m_max[0], currentTemp)),
+          minTemp:Math.round(safeNum(d.temperature_2m_min[0], currentTemp)),
+          condition:meta.desc,
+          feelsLike:Math.round(currentFeels),
+          uv:Math.round(safeNum((d.uv_index_max || [0])[0], 0)),
+          rainChance:safeNum((d.precipitation_probability_max || [0])[0], 0),
+          humidity:currentHum,
+          windSpeed:Math.round(currentWind),
+          windDir:windDirection(currentWindDir),
+          windDegree:currentWindDir,
+          windMax:Math.max(...hWind.slice(idx0,idx0+24).map(v=>Math.round(safeNum(v,0))), 0),
+          pressure:Math.round(currentPress),
+          visibility:Math.round(safeNum(hVis[idx0],10000)/1000),
+          aqi:Math.floor(Math.random()*46)+15,
+          pm25:Math.floor(Math.random()*20)+5,
+          pm10:Math.floor(Math.random()*40)+10,
+          sunrise:d.sunrise && d.sunrise[0] ? new Date(d.sunrise[0]).toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'})+' น.' : '-',
+          sunset:d.sunset && d.sunset[0] ? new Date(d.sunset[0]).toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'})+' น.' : '-',
+          icon:meta.icon,
+          coords:[lat,lon],
+          hourly:[],
+          daily:[]
+        };
+
+        for(let i=0;i<24;i++){
+          const idx = idx0+i;
+          if(idx>=hTime.length) break;
+          const hm = weatherMeta(safeNum(hCode[idx],0));
+          data.hourly.push({
+            time:i===0?'ตอนนี้':new Date(hTime[idx]).getHours()+':00',
+            temp:Math.round(safeNum(hTemp[idx],currentTemp)),
+            icon:hm.icon,
+            rain:safeNum(hRain[idx],0)+'%',
+            wind:Math.round(safeNum(hWind[idx],0))+' km/h'
+          });
+        }
+
         const days = ['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสบดี','ศุกร์','เสาร์'];
         for(let i=0;i<7;i++){
-          const date = new Date(d.time[i]); const dm = weatherMeta(d.weathercode[i]);
-          data.daily.push({day:i===0?'วันนี้':days[date.getDay()],date:date.getDate()+' '+date.toLocaleString('th-TH',{month:'short'}),tempMax:Math.round(d.temperature_2m_max[i]),tempMin:Math.round(d.temperature_2m_min[i]),icon:dm.icon,rain:(d.precipitation_probability_max[i]||0)+'%'});
+          if(!d.time || !d.time[i]) break;
+          const date = new Date(d.time[i]);
+          const dm = weatherMeta(safeNum(dCode[i],0));
+          data.daily.push({
+            day:i===0?'วันนี้':days[date.getDay()],
+            date:date.getDate()+' '+date.toLocaleString('th-TH',{month:'short'}),
+            tempMax:Math.round(safeNum(d.temperature_2m_max[i],currentTemp)),
+            tempMin:Math.round(safeNum(d.temperature_2m_min[i],currentTemp)),
+            icon:dm.icon,
+            rain:safeNum((d.precipitation_probability_max || [])[i],0)+'%'
+          });
         }
-        if(cur.weathercode >= 61){data.hasAlert=true;data.alertTitle='ตรวจพบสภาวะฝนในพื้นที่';data.alertDesc=`ขณะนี้มีแนวโน้ม ${meta.desc} โปรดวางแผนการเดินทางและติดตามข้อมูลใกล้ชิด`;}
+
+        if(currentCode >= 61){
+          data.hasAlert=true;
+          data.alertTitle='ตรวจพบสภาวะฝนในพื้นที่';
+          data.alertDesc=`ขณะนี้มีแนวโน้ม ${meta.desc} โปรดวางแผนการเดินทางและติดตามข้อมูลใกล้ชิด`;
+        }
         initApp(data);
       }catch(e){
-        console.error(e);showToast('โหลดข้อมูลอากาศไม่สำเร็จ ใช้ข้อมูลจำลองแทน','error');initApp(fallbackData);
+        console.error(e);
+        showToast('โหลดข้อมูลอากาศไม่สำเร็จ ใช้ข้อมูลจำลองแทน','error');
+        initApp(fallbackData);
       }
     }
 
-    function weatherMeta(code){
-      const map = {0:['ฟ้าใส','fa-sun'],1:['ท้องฟ้าแจ่มใส','fa-sun'],2:['มีเมฆบางส่วน','fa-cloud-sun'],3:['มีเมฆมาก','fa-cloud'],45:['มีหมอก','fa-smog'],48:['หมอกลงจัด','fa-smog'],51:['ฝนปรอยๆ','fa-cloud-rain'],53:['ฝนเล็กน้อย','fa-cloud-rain'],55:['ฝนปานกลาง','fa-cloud-rain'],61:['ฝนตก','fa-cloud-showers-heavy'],63:['ฝนตกหนัก','fa-cloud-showers-heavy'],65:['ฝนตกหนักมาก','fa-cloud-showers-heavy'],80:['ฝนตกสลับหยุด','fa-cloud-showers-heavy'],81:['ฝนตกหนักเป็นช่วง','fa-cloud-showers-heavy'],82:['ฝนตกกระหน่ำ','fa-cloud-showers-heavy'],95:['พายุฝนฟ้าคะนอง','fa-cloud-bolt']};
-      const m = map[code] || ['ไม่ทราบสถานะ','fa-cloud-sun']; return {desc:m[0],icon:m[1]};
-    }
-
-    function windDirection(deg){
-      if(deg>337.5||deg<=22.5) return 'N (เหนือ)'; if(deg<=67.5) return 'NE (ตะวันออกเฉียงเหนือ)'; if(deg<=112.5) return 'E (ตะวันออก)'; if(deg<=157.5) return 'SE (ตะวันออกเฉียงใต้)'; if(deg<=202.5) return 'S (ใต้)'; if(deg<=247.5) return 'SW (ตะวันตกเฉียงใต้)'; if(deg<=292.5) return 'W (ตะวันตก)'; return 'NW (ตะวันตกเฉียงเหนือ)';
-    }
-
     function initApp(data){
-      activeData = data; renderAll(); initOrUpdateMaps(); renderTempChart(); if(currentView==='history') renderCompareChart(); showToast('อัปเดตข้อมูลเรียบร้อย');
+      activeData = data;
+      renderAll();
+      initOrUpdateMaps();
+      renderTempChart();
+      if(currentView === 'history') renderCompareChart();
+      showToast('อัปเดตข้อมูลเรียบร้อย');
     }
-
-    function setLoadingTitle(text){document.getElementById('cityName').innerHTML = `${text} <i class='fa-solid fa-spinner fa-spin text-base ml-1'></i>`;}
-    function toTemp(c){return currentUnit==='C'?c:Math.round(c*9/5+32)}
 
     function renderAll(){
       if(!activeData) return;
-      const d = activeData; const now = new Date();
+      const d = activeData;
+      const now = new Date();
+      setText('sideLocationName', d.name);
+      setText('mobileLocationName', d.name);
       document.getElementById('cityName').innerHTML = `${d.name}, ${d.country} <i class="fa-solid fa-location-dot text-base ml-1 text-blue-200"></i>`;
-      document.getElementById('sideLocationName').textContent = d.name; document.getElementById('mobileLocationName').textContent = d.name;
-      document.getElementById('currentDateText').textContent = `${now.toLocaleDateString('th-TH',{weekday:'long',year:'numeric',month:'long',day:'numeric'})} ${now.toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'})} น.`;
-      document.getElementById('updateTimeText').textContent = `อัปเดตล่าสุด: ${now.toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'})} น.`;
-      document.getElementById('heroTemp').textContent = toTemp(d.temp); document.getElementById('heroUnit').textContent = currentUnit;
+      setText('currentDateText', `${now.toLocaleDateString('th-TH',{weekday:'long',year:'numeric',month:'long',day:'numeric'})} ${now.toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'})} น.`);
+      setText('updateTimeText', `อัปเดตล่าสุด: ${now.toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'})} น.`);
+      setText('heroTemp', toTemp(d.temp));
+      setText('heroUnit', currentUnit);
       document.getElementById('heroIcon').className = `fa-solid ${d.icon} text-yellow-300 weather-icon-shadow text-5xl sm:text-6xl animate-pulse`;
       document.getElementById('heroCondition').innerHTML = `${d.condition} <span class="text-sm bg-white/20 px-3 py-1 rounded-full font-medium ml-1 inline-block mt-1">รู้สึกเหมือน ${toTemp(d.feelsLike)}°${currentUnit}</span>`;
-      document.getElementById('heroUV').innerHTML = `<i class="fa-solid fa-sun text-yellow-300"></i> ${d.uv}`; document.getElementById('heroRainChance').innerHTML = `<i class="fa-solid fa-cloud-showers-heavy text-blue-200"></i> ${d.rainChance}%`;
-      document.getElementById('heroMax').textContent = `${toTemp(d.maxTemp)}°${currentUnit}`; document.getElementById('heroMin').textContent = `${toTemp(d.minTemp)}°${currentUnit}`; document.getElementById('heroHumid').textContent = `${d.humidity}%`; document.getElementById('heroWind').textContent = `${d.windSpeed} km/h`; document.getElementById('heroPress').textContent = `${d.pressure} hPa`; document.getElementById('heroVis').textContent = `${d.visibility} km`;
-      renderHourly(); renderDaily(); renderWindRain(); renderAQI(); renderAstronomy(); renderAlerts();
+      document.getElementById('heroUV').innerHTML = `<i class="fa-solid fa-sun text-yellow-300"></i> ${d.uv}`;
+      document.getElementById('heroRainChance').innerHTML = `<i class="fa-solid fa-cloud-showers-heavy text-blue-200"></i> ${d.rainChance}%`;
+      setText('heroMax', `${toTemp(d.maxTemp)}°${currentUnit}`);
+      setText('heroMin', `${toTemp(d.minTemp)}°${currentUnit}`);
+      setText('heroHumid', `${d.humidity}%`);
+      setText('heroWind', `${d.windSpeed} km/h`);
+      setText('heroPress', `${d.pressure} hPa`);
+      setText('heroVis', `${d.visibility} km`);
+      renderHourly();
+      renderDaily();
+      renderWindRain();
+      renderAQI();
+      renderAstronomy();
+      renderAlerts();
     }
 
     function renderHourly(){
-      const overview = document.getElementById('hourlyOverview'); const full = document.getElementById('hourlyFull'); overview.innerHTML=''; full.innerHTML='';
+      const overview = document.getElementById('hourlyOverview');
+      const full = document.getElementById('hourlyFull');
+      if(!overview || !full) return;
+      overview.innerHTML='';
+      full.innerHTML='';
       activeData.hourly.forEach((item,i)=>{
         const temp = toTemp(item.temp);
-        if(i<8) overview.insertAdjacentHTML('beforeend',`<div class="snap-start min-w-[94px] bg-slate-50 rounded-3xl p-3 text-center border border-slate-100"><span class="text-xs font-bold text-slate-500">${item.time}</span><i class="fa-solid ${item.icon} text-2xl text-blue-500 my-3 block"></i><strong class="text-lg">${temp}°</strong><div class="text-[10px] text-blue-500 mt-1">${item.rain}</div></div>`);
+        if(i<8){
+          overview.insertAdjacentHTML('beforeend',`<div class="snap-start min-w-[94px] bg-slate-50 rounded-3xl p-3 text-center border border-slate-100"><span class="text-xs font-bold text-slate-500">${item.time}</span><i class="fa-solid ${item.icon} text-2xl text-blue-500 my-3 block"></i><strong class="text-lg">${temp}°</strong><div class="text-[10px] text-blue-500 mt-1">${item.rain}</div></div>`);
+        }
         full.insertAdjacentHTML('beforeend',`<div class="bg-slate-50 rounded-3xl p-4 border border-slate-100 flex items-center justify-between gap-3"><div><div class="font-bold text-slate-700">${item.time}</div><div class="text-[11px] text-slate-400">ฝน ${item.rain} • ลม ${item.wind}</div></div><i class="fa-solid ${item.icon} text-blue-500 text-2xl"></i><strong class="text-xl">${temp}°${currentUnit}</strong></div>`);
       });
     }
 
     function renderDaily(){
-      const overview = document.getElementById('dailyOverview'); const full = document.getElementById('dailyFull'); overview.innerHTML=''; full.innerHTML='';
+      const overview = document.getElementById('dailyOverview');
+      const full = document.getElementById('dailyFull');
+      if(!overview || !full) return;
+      overview.innerHTML='';
+      full.innerHTML='';
       activeData.daily.forEach(day=>{
         overview.insertAdjacentHTML('beforeend',`<div class="bg-slate-50 p-3 rounded-3xl text-center border border-slate-100"><div class="text-xs font-bold text-slate-600">${day.day}</div><div class="text-[10px] text-slate-400">${day.date}</div><i class="fa-solid ${day.icon} text-2xl text-yellow-500 my-3 block"></i><div class="text-sm font-bold">${toTemp(day.tempMax)}° <span class="text-slate-400">/ ${toTemp(day.tempMin)}°</span></div><div class="text-[10px] text-blue-500 mt-1">ฝน ${day.rain}</div></div>`);
         full.insertAdjacentHTML('beforeend',`<div class="bg-slate-50 rounded-3xl p-4 flex items-center gap-4 border border-slate-100"><div class="w-24"><div class="font-bold">${day.day}</div><div class="text-xs text-slate-400">${day.date}</div></div><i class="fa-solid ${day.icon} text-3xl text-yellow-500 w-12 text-center"></i><div class="flex-1"><div class="h-3 bg-gradient-to-r from-blue-300 via-emerald-300 to-orange-400 rounded-full"></div><div class="flex justify-between text-xs text-slate-500 mt-1"><span>${toTemp(day.tempMin)}°${currentUnit}</span><span>${toTemp(day.tempMax)}°${currentUnit}</span></div></div><div class="text-xs text-blue-500 font-bold">${day.rain}</div></div>`);
@@ -1196,46 +2137,272 @@
     }
 
     function renderWindRain(){
-      const d = activeData; document.getElementById('windNeedle').style.transform = `rotate(${d.windDegree}deg)`; document.getElementById('windNow').textContent = `${d.windSpeed} km/h`; document.getElementById('windDir').textContent = d.windDir; document.getElementById('windMax').textContent = `${d.windMax} km/h`; document.getElementById('rainAmount').textContent = d.rainChance; document.getElementById('rainBarDynamic').style.height = `${Math.max(10,d.rainChance)}%`;
-      const windText = document.getElementById('windStatusMsg'); const windy = d.windSpeed > 20; windText.className = windy?'text-xs text-orange-500 font-bold mt-2':'text-xs text-emerald-600 font-bold mt-2'; windText.innerHTML = windy?'<i class="fa-solid fa-triangle-exclamation"></i> ลมพัดแรง':'<i class="fa-solid fa-circle-check"></i> ลมพัดสบาย';
+      if(!activeData) return;
+      const d = activeData;
+      const windNeedle = document.getElementById('windNeedle');
+      const windText = document.getElementById('windStatusMsg');
+      if(windNeedle) windNeedle.style.transform = `rotate(${d.windDegree || 0}deg)`;
+      setText('windNow', `${d.windSpeed || 0} km/h`);
+      setText('windDir', d.windDir || '-');
+      setText('windMax', `${d.windMax || 0} km/h`);
+      setText('rainAmount', d.rainChance || 0);
+      const rainBar = document.getElementById('rainBarDynamic');
+      if(rainBar) rainBar.style.height = `${Math.max(10, d.rainChance || 0)}%`;
+      if(windText){
+        const windy = (d.windSpeed || 0) > 20;
+        windText.className = windy ? 'text-xs text-orange-500 font-bold mt-2' : 'text-xs text-emerald-600 font-bold mt-2';
+        windText.innerHTML = windy ? '<i class="fa-solid fa-triangle-exclamation"></i> ลมพัดแรง' : '<i class="fa-solid fa-circle-check"></i> ลมพัดสบาย';
+      }
     }
 
     function renderAQI(){
-      const d = activeData; const good = d.aqi < 50; document.getElementById('aqiScore').textContent=d.aqi; document.getElementById('aqiFullScore').textContent=d.aqi; document.getElementById('aqiRating').textContent=good?'ดี':'ปานกลาง'; document.getElementById('aqiTextSub').textContent=good?'ดีมาก':'ปานกลาง'; document.getElementById('pm25Val').textContent=d.pm25; document.getElementById('pm10Val').textContent=d.pm10; document.getElementById('aqiPM25').textContent=`${d.pm25} µg/m³`; document.getElementById('aqiPM10').textContent=`${d.pm10} µg/m³`; document.getElementById('aqiCircle').setAttribute('stroke-dashoffset',201-(Math.min(d.aqi,100)/100)*201);
+      const d = activeData;
+      const good = d.aqi < 50;
+      setText('aqiScore', d.aqi);
+      setText('aqiFullScore', d.aqi);
+      setText('aqiRating', good ? 'ดี' : 'ปานกลาง');
+      setText('aqiTextSub', good ? 'ดีมาก' : 'ปานกลาง');
+      setText('pm25Val', d.pm25);
+      setText('pm10Val', d.pm10);
+      setText('aqiPM25', `${d.pm25} µg/m³`);
+      setText('aqiPM10', `${d.pm10} µg/m³`);
+      const circle = document.getElementById('aqiCircle');
+      if(circle) circle.setAttribute('stroke-dashoffset',201-(Math.min(d.aqi,100)/100)*201);
     }
 
-    function renderAstronomy(){const d=activeData; ['sunriseTime','astroSunrise'].forEach(id=>document.getElementById(id).textContent=d.sunrise); ['sunsetTime','astroSunset'].forEach(id=>document.getElementById(id).textContent=d.sunset); document.getElementById('dayLengthText').innerHTML='ความยาวกลางวัน: <strong>ประมาณ 12 ชม. 30 นาที</strong>';}
-    function renderAlerts(){const c=document.getElementById('alertContainer'); if(activeData.hasAlert)c.innerHTML=`<div class="bg-amber-50 border-l-4 border-amber-400 p-6 rounded-r-3xl flex gap-4"><i class="fa-solid fa-triangle-exclamation text-amber-500 text-3xl mt-1 shrink-0"></i><div><h3 class="font-extrabold text-lg text-amber-800">${activeData.alertTitle}</h3><p class="text-sm text-amber-700 mt-2">${activeData.alertDesc}</p></div></div>`; else c.innerHTML='<div class="bg-slate-50 border-l-4 border-slate-300 p-6 rounded-r-3xl flex gap-4"><i class="fa-solid fa-shield-check text-slate-400 text-3xl mt-1 shrink-0"></i><div><h3 class="font-extrabold text-lg text-slate-700">สภาวะอากาศปกติ</h3><p class="text-sm text-slate-500 mt-2">ยังไม่มีการแจ้งเตือนพายุหรือสภาพอากาศรุนแรงในพื้นที่</p></div></div>';}
+    function renderAstronomy(){
+      const d = activeData;
+      ['sunriseTime','astroSunrise'].forEach(id=>setText(id,d.sunrise));
+      ['sunsetTime','astroSunset'].forEach(id=>setText(id,d.sunset));
+      const dayText = document.getElementById('dayLengthText');
+      if(dayText) dayText.innerHTML='ความยาวกลางวัน: <strong>ประมาณ 12 ชม. 30 นาที</strong>';
+    }
+
+    function renderAlerts(){
+      const c = document.getElementById('alertContainer');
+      if(!c) return;
+      if(activeData.hasAlert){
+        c.innerHTML = `<div class="bg-amber-50 border-l-4 border-amber-400 p-6 rounded-r-3xl flex gap-4"><i class="fa-solid fa-triangle-exclamation text-amber-500 text-3xl mt-1 shrink-0"></i><div><h3 class="font-extrabold text-lg text-amber-800">${activeData.alertTitle}</h3><p class="text-sm text-amber-700 mt-2">${activeData.alertDesc}</p></div></div>`;
+      }else{
+        c.innerHTML = '<div class="bg-slate-50 border-l-4 border-slate-300 p-6 rounded-r-3xl flex gap-4"><i class="fa-solid fa-shield-check text-slate-400 text-3xl mt-1 shrink-0"></i><div><h3 class="font-extrabold text-lg text-slate-700">สภาวะอากาศปกติ</h3><p class="text-sm text-slate-500 mt-2">ยังไม่มีการแจ้งเตือนพายุหรือสภาพอากาศรุนแรงในพื้นที่</p></div></div>';
+      }
+    }
 
     function initOrUpdateMaps(){
-      if(!window.L || !activeData) return;
+      if(!activeData) return;
+      const previewBox = document.getElementById('previewMap');
+      const fullBox = document.getElementById('fullscreenRadarMap');
+      if(!window.L){
+        const mapFallback = '<div class="w-full h-full flex items-center justify-center text-center text-sm text-slate-400 bg-slate-100 p-6">ไม่สามารถโหลดแผนที่ได้ กรุณาตรวจสอบอินเทอร์เน็ตหรือ CDN ของ Leaflet</div>';
+        if(previewBox) previewBox.innerHTML = mapFallback;
+        if(fullBox) fullBox.innerHTML = mapFallback;
+        return;
+      }
       const coords = activeData.coords;
-      if(!previewMap){previewMap=L.map('previewMap',{zoomControl:false,attributionControl:false}).setView(coords,10);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19}).addTo(previewMap);}else previewMap.setView(coords,10);
-      if(previewCircle) previewMap.removeLayer(previewCircle); previewCircle=L.circle(coords,{color:'#22c55e',fillColor:'#86efac',fillOpacity:.35,radius:12000}).addTo(previewMap); setTimeout(()=>previewMap.invalidateSize(),250);
-      if(!fullMap){fullMap=L.map('fullscreenRadarMap',{zoomControl:true}).setView(coords,10);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(fullMap);}else fullMap.setView(coords,10);
-      if(fullCircle) fullMap.removeLayer(fullCircle); fullCircle=L.circle(coords,{color:'#f43f5e',fillColor:'#fda4af',fillOpacity:.4,radius:18000}).addTo(fullMap); setTimeout(()=>fullMap.invalidateSize(),250);
+      if(!previewMap){
+        previewMap = L.map('previewMap',{zoomControl:false,attributionControl:false}).setView(coords,10);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19}).addTo(previewMap);
+      }else{
+        previewMap.setView(coords,10);
+      }
+      if(previewCircle) previewMap.removeLayer(previewCircle);
+      previewCircle = L.circle(coords,{color:'#22c55e',fillColor:'#86efac',fillOpacity:.35,radius:12000}).addTo(previewMap);
+      setTimeout(()=>previewMap.invalidateSize(),250);
+
+      if(!fullMap){
+        fullMap = L.map('fullscreenRadarMap',{zoomControl:true}).setView(coords,10);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(fullMap);
+      }else{
+        fullMap.setView(coords,10);
+      }
+      if(fullCircle) fullMap.removeLayer(fullCircle);
+      fullCircle = L.circle(coords,{color:'#f43f5e',fillColor:'#fda4af',fillOpacity:.4,radius:18000}).addTo(fullMap);
+      setTimeout(()=>fullMap.invalidateSize(),250);
     }
 
     function renderTempChart(){
-      if(!window.Chart || !activeData) return; const canvas=document.getElementById('tempTrendChart'); if(tempChart) tempChart.destroy();
-      tempChart=new Chart(canvas,{type:'line',data:{labels:activeData.daily.map(d=>d.day),datasets:[{label:'สูงสุด',data:activeData.daily.map(d=>toTemp(d.tempMax)),borderColor:'#f97316',backgroundColor:'rgba(249,115,22,.12)',fill:true,tension:.35},{label:'ต่ำสุด',data:activeData.daily.map(d=>toTemp(d.tempMin)),borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,.10)',fill:true,tension:.35}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{family:'Prompt'}}}},scales:{x:{ticks:{font:{family:'Prompt'}}},y:{ticks:{font:{family:'Prompt'}}}}}});
+      if(!activeData) return;
+      const canvas = document.getElementById('tempTrendChart');
+      if(!window.Chart || !canvas){
+        showChartFallback(canvas,'ไม่สามารถโหลดกราฟอุณหภูมิได้ กรุณาตรวจสอบอินเทอร์เน็ตหรือ CDN ของ Chart.js');
+        return;
+      }
+      if(tempChart) tempChart.destroy();
+      tempChart = new Chart(canvas,{
+        type:'line',
+        data:{
+          labels:activeData.daily.map(d=>d.day),
+          datasets:[
+            {label:'สูงสุด',data:activeData.daily.map(d=>toTemp(d.tempMax)),borderColor:'#f97316',backgroundColor:'rgba(249,115,22,.12)',fill:true,tension:.35},
+            {label:'ต่ำสุด',data:activeData.daily.map(d=>toTemp(d.tempMin)),borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,.10)',fill:true,tension:.35}
+          ]
+        },
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{family:'Prompt'}}}},scales:{x:{ticks:{font:{family:'Prompt'}}},y:{ticks:{font:{family:'Prompt'}}}}}
+      });
     }
 
     function renderCompareChart(){
-      if(!window.Chart || !activeData) return; const canvas=document.getElementById('historicalCompareChart'); if(compareChart) compareChart.destroy();
-      compareChart=new Chart(canvas,{type:'bar',data:{labels:activeData.hourly.slice(0,12).map(h=>h.time),datasets:[{label:'อุณหภูมิ',data:activeData.hourly.slice(0,12).map(h=>toTemp(h.temp)),backgroundColor:'rgba(59,130,246,.65)'},{label:'ลม',data:activeData.hourly.slice(0,12).map(h=>parseInt(h.wind)||0),backgroundColor:'rgba(16,185,129,.65)'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{family:'Prompt'}}}},scales:{x:{ticks:{font:{family:'Prompt'}}},y:{ticks:{font:{family:'Prompt'}}}}}});
+      if(!activeData) return;
+      const canvas = document.getElementById('historicalCompareChart');
+      if(!window.Chart || !canvas){
+        showChartFallback(canvas,'ไม่สามารถโหลดกราฟสถิติได้ กรุณาตรวจสอบอินเทอร์เน็ตหรือ CDN ของ Chart.js');
+        return;
+      }
+      if(compareChart) compareChart.destroy();
+      compareChart = new Chart(canvas,{
+        type:'bar',
+        data:{
+          labels:activeData.hourly.slice(0,12).map(h=>h.time),
+          datasets:[
+            {label:'อุณหภูมิ',data:activeData.hourly.slice(0,12).map(h=>toTemp(h.temp)),backgroundColor:'rgba(59,130,246,.65)'},
+            {label:'ลม',data:activeData.hourly.slice(0,12).map(h=>parseInt(h.wind)||0),backgroundColor:'rgba(16,185,129,.65)'}
+          ]
+        },
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{family:'Prompt'}}}},scales:{x:{ticks:{font:{family:'Prompt'}}},y:{ticks:{font:{family:'Prompt'}}}}}
+      });
     }
 
-    function switchView(view){
-      currentView=view; document.querySelectorAll('.view-content').forEach(v=>v.classList.add('hidden')); const active=document.getElementById(`view-${view}`); if(active) active.classList.remove('hidden'); document.querySelectorAll('[data-view]').forEach(btn=>btn.classList.toggle('active',btn.dataset.view===view)); if(view==='radar'&&fullMap)setTimeout(()=>fullMap.invalidateSize(),180); if(view==='history')setTimeout(renderCompareChart,120); window.scrollTo({top:0,behavior:'smooth'});
+    function showChartFallback(canvas,message){
+      if(!canvas || !canvas.parentElement) return;
+      canvas.parentElement.innerHTML = `<div class="h-full min-h-[220px] flex items-center justify-center text-center text-sm text-slate-400 bg-slate-50 rounded-3xl p-6">${message}</div>`;
     }
 
-    function switchUnit(unit){currentUnit=unit; document.querySelectorAll('.unit-btn').forEach(btn=>btn.classList.remove('bg-blue-600','text-white')); if(unit==='C'){['btnC','setBtnC'].forEach(id=>document.getElementById(id)?.classList.add('bg-blue-600','text-white'));}else{['btnF','setBtnF'].forEach(id=>document.getElementById(id)?.classList.add('bg-blue-600','text-white'));} renderAll(); renderTempChart(); if(currentView==='history')renderCompareChart();}
+    function switchView(view, animate=true){
+      currentView = view;
+      document.querySelectorAll('.view-content').forEach(section=>section.classList.add('hidden'));
+      const target = document.getElementById(`view-${view}`);
+      if(target) target.classList.remove('hidden');
+      document.querySelectorAll('[data-view]').forEach(btn=>btn.classList.toggle('active',btn.dataset.view===view));
+      if(view==='radar' && fullMap) setTimeout(()=>fullMap.invalidateSize(),200);
+      if(view==='history') setTimeout(renderCompareChart,120);
+      const scroller = document.querySelector('.content-scroll');
+      if(scroller) scroller.scrollTo({top:0,behavior:animate?'smooth':'auto'});
+    }
 
-    function searchLocation(event){event.preventDefault(); const q=document.getElementById('searchInput').value.trim(); if(!q)return; searchLocationByName(q);}
-    async function searchLocationByName(q){try{showToast(`กำลังค้นหา ${q}...`); const res=await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q)}&limit=1&accept-language=th`); const data=await res.json(); if(!data.length)throw new Error('not found'); await fetchWeather(parseFloat(data[0].lat),parseFloat(data[0].lon),data[0].display_name.split(',').slice(0,2).join(',')); document.getElementById('searchInput').blur();}catch(e){showToast('ไม่พบสถานที่ที่ค้นหา','error');}}
-    function resetRadarMap(){if(fullMap&&activeData){fullMap.setView(activeData.coords,10);showToast('กลับไปที่ศูนย์กลางแล้ว');}}
-    async function shareWeather(){if(!activeData)return; const text=`สภาพอากาศที่ ${activeData.name}: ${activeData.condition}, ${activeData.temp}°C, ฝน ${activeData.rainChance}%, ลม ${activeData.windSpeed} km/h`; try{if(navigator.share){await navigator.share({title:'WeatherPro',text});return;} await navigator.clipboard.writeText(text); showToast('คัดลอกข้อมูลสภาพอากาศแล้ว');}catch(e){const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.left='-999px';document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();showToast('คัดลอกข้อมูลสภาพอากาศแล้ว');}}
+    function switchUnit(unit){
+      currentUnit = unit;
+      setUnitButtonState('btnC', unit === 'C');
+      setUnitButtonState('btnF', unit === 'F');
+      setUnitButtonState('setBtnC', unit === 'C');
+      setUnitButtonState('setBtnF', unit === 'F');
+      renderAll();
+      renderTempChart();
+      if(currentView === 'history') renderCompareChart();
+    }
+
+    function setUnitButtonState(id,isActive){
+      const btn = document.getElementById(id);
+      if(!btn) return;
+      btn.classList.remove('bg-blue-600','text-white','text-slate-400','text-slate-500');
+      if(isActive){
+        btn.classList.add('bg-blue-600','text-white');
+      }else{
+        btn.classList.add(id.startsWith('set') ? 'text-slate-500' : 'text-slate-400');
+      }
+    }
+
+    function searchLocation(event){
+      event.preventDefault();
+      const q = document.getElementById('searchInput').value.trim();
+      if(!q) return;
+      searchLocationByName(q);
+    }
+
+    async function searchLocationByName(q){
+      try{
+        showToast(`กำลังค้นหา ${q}...`);
+        const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(q)}&count=1&language=th&format=json`;
+        const res = await fetch(url);
+        if(!res.ok) throw new Error('geocoding failed');
+        const data = await res.json();
+        if(!data.results || !data.results.length) throw new Error('not found');
+        const place = data.results[0];
+        const label = [place.name, place.admin1, place.country].filter(Boolean).join(', ');
+        await fetchWeather(Number(place.latitude), Number(place.longitude), label);
+        document.getElementById('searchInput').blur();
+      }catch(e){
+        console.error(e);
+        showToast('ไม่พบสถานที่ที่ค้นหา','error');
+      }
+    }
+
+    function resetRadarMap(){
+      if(fullMap && activeData){
+        fullMap.setView(activeData.coords,10);
+        showToast('กลับไปที่ศูนย์กลางแล้ว');
+      }
+    }
+
+    async function shareWeather(){
+      if(!activeData) return;
+      const text = `สภาพอากาศที่ ${activeData.name}: ${activeData.condition}, ${activeData.temp}°C, ฝน ${activeData.rainChance}%, ลม ${activeData.windSpeed} km/h`;
+      try{
+        if(navigator.share){
+          await navigator.share({title:'WeatherPro',text});
+          return;
+        }
+        await navigator.clipboard.writeText(text);
+        showToast('คัดลอกข้อมูลสภาพอากาศแล้ว');
+      }catch(e){
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.left = '-999px';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        ta.remove();
+        showToast('คัดลอกข้อมูลสภาพอากาศแล้ว');
+      }
+    }
+
+    function weatherMeta(code){
+      const map = {
+        0:['ฟ้าใส','fa-sun'],
+        1:['ท้องฟ้าแจ่มใส','fa-sun'],
+        2:['มีเมฆบางส่วน','fa-cloud-sun'],
+        3:['มีเมฆมาก','fa-cloud'],
+        45:['มีหมอก','fa-smog'],
+        48:['หมอกลงจัด','fa-smog'],
+        51:['ฝนปรอยๆ','fa-cloud-rain'],
+        53:['ฝนเล็กน้อย','fa-cloud-rain'],
+        55:['ฝนปานกลาง','fa-cloud-rain'],
+        61:['ฝนตก','fa-cloud-showers-heavy'],
+        63:['ฝนตกหนัก','fa-cloud-showers-heavy'],
+        65:['ฝนตกหนักมาก','fa-cloud-showers-heavy'],
+        80:['ฝนตกสลับหยุด','fa-cloud-showers-heavy'],
+        81:['ฝนตกหนักเป็นช่วง','fa-cloud-showers-heavy'],
+        82:['ฝนตกกระหน่ำ','fa-cloud-showers-heavy'],
+        95:['พายุฝนฟ้าคะนอง','fa-cloud-bolt']
+      };
+      const m = map[code] || ['ไม่ทราบสถานะ','fa-cloud-sun'];
+      return {desc:m[0],icon:m[1]};
+    }
+
+    function windDirection(deg){
+      if(deg>337.5 || deg<=22.5) return 'N (เหนือ)';
+      if(deg<=67.5) return 'NE (ตะวันออกเฉียงเหนือ)';
+      if(deg<=112.5) return 'E (ตะวันออก)';
+      if(deg<=157.5) return 'SE (ตะวันออกเฉียงใต้)';
+      if(deg<=202.5) return 'S (ใต้)';
+      if(deg<=247.5) return 'SW (ตะวันตกเฉียงใต้)';
+      if(deg<=292.5) return 'W (ตะวันตก)';
+      return 'NW (ตะวันตกเฉียงเหนือ)';
+    }
+
+    function toTemp(c){
+      return currentUnit === 'C' ? c : Math.round(c * 9 / 5 + 32);
+    }
+
+    function safeNum(value,fallback=0){
+      const n = Number(value);
+      return Number.isFinite(n) ? n : fallback;
+    }
+
+    function setText(id,value){
+      const el = document.getElementById(id);
+      if(el) el.textContent = value;
+    }
   </script>
 </body>
 </html>
