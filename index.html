@@ -253,6 +253,45 @@
                   <h3 class="font-extrabold text-lg flex items-center gap-2 mb-4"><i class="fa-solid fa-chart-line text-blue-600"></i> แนวโน้มอุณหภูมิ</h3>
                   <div class="h-64 relative"><canvas id="tempTrendChart"></canvas></div>
                 </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div class="soft-card rounded-[2rem] p-5 sm:p-6">
+                    <h3 class="font-extrabold text-lg mb-4"><i class="fa-solid fa-compass text-blue-600"></i> ลมปัจจุบัน</h3>
+                    <div class="flex flex-col sm:flex-row items-center justify-center gap-6 py-2">
+                      <div class="w-32 h-32 rounded-full border-4 border-slate-200 relative flex items-center justify-center shadow-inner compass-dial shrink-0">
+                        <span class="absolute top-2 text-[10px] font-bold text-slate-500">N</span>
+                        <span class="absolute right-3 text-[10px] font-bold text-slate-500">E</span>
+                        <span class="absolute bottom-2 text-[10px] font-bold text-slate-500">S</span>
+                        <span class="absolute left-3 text-[10px] font-bold text-slate-500">W</span>
+                        <div id="windNeedle" class="w-2.5 h-20 bg-gradient-to-b from-blue-600 to-transparent rounded-full relative transition-transform duration-700">
+                          <div class="w-4 h-4 bg-white border-2 border-blue-600 rounded-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
+                        </div>
+                      </div>
+                      <div class="space-y-1 text-center sm:text-left text-sm">
+                        <p class="text-slate-500">ความเร็วลม: <strong id="windNow" class="text-slate-800">-</strong></p>
+                        <p class="text-slate-500">ทิศทางลม: <strong id="windDir" class="text-slate-800">-</strong></p>
+                        <p class="text-slate-500">สูงสุดวันนี้: <strong id="windMax" class="text-slate-800">-</strong></p>
+                        <p class="text-xs text-emerald-600 font-bold mt-2" id="windStatusMsg"><i class="fa-solid fa-circle-check"></i> กำลังประมวลผล</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="soft-card rounded-[2rem] p-5 sm:p-6">
+                    <h3 class="font-extrabold text-lg mb-4"><i class="fa-solid fa-droplet text-blue-600"></i> โอกาสเกิดฝนสูงสุดวันนี้</h3>
+                    <div class="flex items-center gap-6 py-2">
+                      <div class="text-center sm:text-left w-24 shrink-0">
+                        <h4 class="text-4xl font-extrabold text-blue-600"><span id="rainAmount">-</span> <span class="text-xs text-slate-500">%</span></h4>
+                        <p class="text-[11px] text-slate-400">อัตราความเสี่ยง</p>
+                      </div>
+                      <div class="flex-1 h-28 flex items-end gap-1 border-b border-slate-100">
+                        <div class="w-1/4 bg-blue-100 h-[20%] rounded-t"></div>
+                        <div class="w-1/4 bg-blue-200 h-[40%] rounded-t"></div>
+                        <div class="w-1/4 bg-blue-300 h-[60%] rounded-t"></div>
+                        <div id="rainBarDynamic" class="w-1/4 bg-blue-500 h-[10%] rounded-t transition-all"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <div class="xl:col-span-4 space-y-6">
@@ -363,44 +402,133 @@
       try{
         let locationName = customName || `พิกัด ${lat.toFixed(2)}, ${lon.toFixed(2)}`;
         let countryName = 'ระบุพิกัดแล้ว';
+
         if(customName && customName.includes(',')){
-          const parts = customName.split(','); locationName = parts[0].trim(); countryName = parts.slice(1).join(',').trim();
+          const parts = customName.split(',');
+          locationName = parts[0].trim();
+          countryName = parts.slice(1).join(',').trim() || countryName;
         }else if(!customName){
           try{
             const geo = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&accept-language=th`);
-            const geoData = await geo.json();
-            if(geoData && geoData.address){
-              locationName = geoData.address.city || geoData.address.state || geoData.address.province || geoData.address.town || geoData.address.village || 'ตำแหน่งปัจจุบัน';
-              countryName = geoData.address.country || countryName;
+            if(geo.ok){
+              const geoData = await geo.json();
+              if(geoData && geoData.address){
+                locationName = geoData.address.city || geoData.address.state || geoData.address.province || geoData.address.town || geoData.address.village || 'ตำแหน่งปัจจุบัน';
+                countryName = geoData.address.country || countryName;
+              }
             }
-          }catch(e){}
+          }catch(e){
+            console.warn('Reverse geocode failed, continue with coordinate name', e);
+          }
         }
 
-        const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&hourly=temperature_2m,relativehumidity_2m,precipitation_probability,windspeed_10m,weathercode,visibility,surface_pressure&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,weathercode,sunrise,sunset,uv_index_max&timezone=auto`;
+        const params = new URLSearchParams({
+          latitude:String(lat),
+          longitude:String(lon),
+          current:'temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,surface_pressure,wind_speed_10m,wind_direction_10m',
+          hourly:'temperature_2m,relative_humidity_2m,precipitation_probability,wind_speed_10m,weather_code,visibility,surface_pressure',
+          daily:'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset,uv_index_max',
+          timezone:'auto'
+        });
+        const url = `https://api.open-meteo.com/v1/forecast?${params.toString()}`;
         const res = await fetch(url);
-        if(!res.ok) throw new Error('weather failed');
+        if(!res.ok) throw new Error(`weather failed: ${res.status}`);
         const w = await res.json();
-        const cur = w.current_weather, h = w.hourly, d = w.daily;
-        const nowIndexRaw = h.time.findIndex(t => new Date(t) >= new Date());
-        const idx0 = nowIndexRaw < 0 ? 0 : nowIndexRaw;
-        const meta = weatherMeta(cur.weathercode);
-        const data = {
-          name:locationName,country:countryName,temp:Math.round(cur.temperature),maxTemp:Math.round(d.temperature_2m_max[0]),minTemp:Math.round(d.temperature_2m_min[0]),condition:meta.desc,feelsLike:Math.round(cur.temperature + ((h.relativehumidity_2m[idx0]||50)>60?2:0)),uv:Math.round(d.uv_index_max[0]||0),rainChance:d.precipitation_probability_max[0]||0,humidity:h.relativehumidity_2m[idx0]||0,windSpeed:Math.round(cur.windspeed),windDir:windDirection(cur.winddirection),windDegree:cur.winddirection,windMax:Math.max(...h.windspeed_10m.slice(idx0,idx0+24).map(v=>Math.round(v))),pressure:Math.round(h.surface_pressure[idx0]||1010),visibility:Math.round((h.visibility[idx0]||10000)/1000),aqi:Math.floor(Math.random()*46)+15,pm25:Math.floor(Math.random()*20)+5,pm10:Math.floor(Math.random()*40)+10,sunrise:new Date(d.sunrise[0]).toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'})+' น.',sunset:new Date(d.sunset[0]).toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'})+' น.',icon:meta.icon,coords:[lat,lon],hourly:[],daily:[]
-        };
-        for(let i=0;i<24;i++){
-          const idx = idx0+i; if(idx>=h.time.length) break;
-          const hm = weatherMeta(h.weathercode[idx]);
-          data.hourly.push({time:i===0?'ตอนนี้':new Date(h.time[idx]).getHours()+':00',temp:Math.round(h.temperature_2m[idx]),icon:hm.icon,rain:(h.precipitation_probability[idx]||0)+'%',wind:Math.round(h.windspeed_10m[idx])+' km/h'});
+
+        const cur = w.current || {};
+        const h = w.hourly || {};
+        const d = w.daily || {};
+        const hTime = h.time || [];
+        const hTemp = h.temperature_2m || [];
+        const hHum = h.relative_humidity_2m || h.relativehumidity_2m || [];
+        const hRain = h.precipitation_probability || [];
+        const hWind = h.wind_speed_10m || h.windspeed_10m || [];
+        const hCode = h.weather_code || h.weathercode || [];
+        const hVis = h.visibility || [];
+        const hPress = h.surface_pressure || [];
+        const dCode = d.weather_code || d.weathercode || [];
+
+        if(!hTime.length || !hTemp.length || !d.temperature_2m_max || !d.temperature_2m_min){
+          throw new Error('weather data incomplete');
         }
+
+        const nowIndexRaw = hTime.findIndex(t => new Date(t) >= new Date());
+        const idx0 = nowIndexRaw < 0 ? 0 : nowIndexRaw;
+        const currentTemp = safeNum(cur.temperature_2m, hTemp[idx0] ?? 0);
+        const currentCode = safeNum(cur.weather_code ?? cur.weathercode, hCode[idx0] ?? 0);
+        const currentWind = safeNum(cur.wind_speed_10m, hWind[idx0] ?? 0);
+        const currentWindDir = safeNum(cur.wind_direction_10m, 0);
+        const currentHum = safeNum(cur.relative_humidity_2m, hHum[idx0] ?? 0);
+        const currentPress = safeNum(cur.surface_pressure, hPress[idx0] ?? 1010);
+        const currentFeels = safeNum(cur.apparent_temperature, currentTemp + (currentHum > 60 ? 2 : 0));
+        const meta = weatherMeta(currentCode);
+
+        const data = {
+          name:locationName,
+          country:countryName,
+          temp:Math.round(currentTemp),
+          maxTemp:Math.round(safeNum(d.temperature_2m_max[0], currentTemp)),
+          minTemp:Math.round(safeNum(d.temperature_2m_min[0], currentTemp)),
+          condition:meta.desc,
+          feelsLike:Math.round(currentFeels),
+          uv:Math.round(safeNum((d.uv_index_max || [0])[0], 0)),
+          rainChance:safeNum((d.precipitation_probability_max || [0])[0], 0),
+          humidity:currentHum,
+          windSpeed:Math.round(currentWind),
+          windDir:windDirection(currentWindDir),
+          windDegree:currentWindDir,
+          windMax:Math.max(...hWind.slice(idx0,idx0+24).map(v=>Math.round(safeNum(v,0))), 0),
+          pressure:Math.round(currentPress),
+          visibility:Math.round(safeNum(hVis[idx0],10000)/1000),
+          aqi:Math.floor(Math.random()*46)+15,
+          pm25:Math.floor(Math.random()*20)+5,
+          pm10:Math.floor(Math.random()*40)+10,
+          sunrise:d.sunrise && d.sunrise[0] ? new Date(d.sunrise[0]).toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'})+' น.' : '-',
+          sunset:d.sunset && d.sunset[0] ? new Date(d.sunset[0]).toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'})+' น.' : '-',
+          icon:meta.icon,
+          coords:[lat,lon],
+          hourly:[],
+          daily:[]
+        };
+
+        for(let i=0;i<24;i++){
+          const idx = idx0+i;
+          if(idx>=hTime.length) break;
+          const hm = weatherMeta(safeNum(hCode[idx],0));
+          data.hourly.push({
+            time:i===0?'ตอนนี้':new Date(hTime[idx]).getHours()+':00',
+            temp:Math.round(safeNum(hTemp[idx],currentTemp)),
+            icon:hm.icon,
+            rain:safeNum(hRain[idx],0)+'%',
+            wind:Math.round(safeNum(hWind[idx],0))+' km/h'
+          });
+        }
+
         const days = ['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสบดี','ศุกร์','เสาร์'];
         for(let i=0;i<7;i++){
-          const date = new Date(d.time[i]); const dm = weatherMeta(d.weathercode[i]);
-          data.daily.push({day:i===0?'วันนี้':days[date.getDay()],date:date.getDate()+' '+date.toLocaleString('th-TH',{month:'short'}),tempMax:Math.round(d.temperature_2m_max[i]),tempMin:Math.round(d.temperature_2m_min[i]),icon:dm.icon,rain:(d.precipitation_probability_max[i]||0)+'%'});
+          if(!d.time || !d.time[i]) break;
+          const date = new Date(d.time[i]);
+          const dm = weatherMeta(safeNum(dCode[i],0));
+          data.daily.push({
+            day:i===0?'วันนี้':days[date.getDay()],
+            date:date.getDate()+' '+date.toLocaleString('th-TH',{month:'short'}),
+            tempMax:Math.round(safeNum(d.temperature_2m_max[i],currentTemp)),
+            tempMin:Math.round(safeNum(d.temperature_2m_min[i],currentTemp)),
+            icon:dm.icon,
+            rain:safeNum((d.precipitation_probability_max || [])[i],0)+'%'
+          });
         }
-        if(cur.weathercode >= 61){data.hasAlert=true;data.alertTitle='ตรวจพบสภาวะฝนในพื้นที่';data.alertDesc=`ขณะนี้มีแนวโน้ม ${meta.desc} โปรดวางแผนการเดินทางและติดตามข้อมูลใกล้ชิด`;}
+
+        if(currentCode >= 61){
+          data.hasAlert=true;
+          data.alertTitle='ตรวจพบสภาวะฝนในพื้นที่';
+          data.alertDesc=`ขณะนี้มีแนวโน้ม ${meta.desc} โปรดวางแผนการเดินทางและติดตามข้อมูลใกล้ชิด`;
+        }
         initApp(data);
       }catch(e){
-        console.error(e);showToast('โหลดข้อมูลอากาศไม่สำเร็จ ใช้ข้อมูลจำลองแทน','error');initApp(fallbackData);
+        console.error(e);
+        showToast('โหลดข้อมูลอากาศไม่สำเร็จ ใช้ข้อมูลจำลองแทน','error');
+        initApp(fallbackData);
       }
     }
 
@@ -419,6 +547,7 @@
 
     function setLoadingTitle(text){document.getElementById('cityName').innerHTML = `${text} <i class='fa-solid fa-spinner fa-spin text-base ml-1'></i>`;}
     function toTemp(c){return currentUnit==='C'?c:Math.round(c*9/5+32)}
+    function safeNum(value,fallback=0){const n=Number(value);return Number.isFinite(n)?n:fallback;}
 
     function renderAll(){
       if(!activeData) return;
@@ -453,8 +582,26 @@
     }
 
     function renderWindRain(){
-      const d = activeData; document.getElementById('windNeedle').style.transform = `rotate(${d.windDegree}deg)`; document.getElementById('windNow').textContent = `${d.windSpeed} km/h`; document.getElementById('windDir').textContent = d.windDir; document.getElementById('windMax').textContent = `${d.windMax} km/h`; document.getElementById('rainAmount').textContent = d.rainChance; document.getElementById('rainBarDynamic').style.height = `${Math.max(10,d.rainChance)}%`;
-      const windText = document.getElementById('windStatusMsg'); const windy = d.windSpeed > 20; windText.className = windy?'text-xs text-orange-500 font-bold mt-2':'text-xs text-emerald-600 font-bold mt-2'; windText.innerHTML = windy?'<i class="fa-solid fa-triangle-exclamation"></i> ลมพัดแรง':'<i class="fa-solid fa-circle-check"></i> ลมพัดสบาย';
+      if(!activeData) return;
+      const d = activeData;
+      const windNeedle = document.getElementById('windNeedle');
+      const windNow = document.getElementById('windNow');
+      const windDir = document.getElementById('windDir');
+      const windMax = document.getElementById('windMax');
+      const rainAmount = document.getElementById('rainAmount');
+      const rainBar = document.getElementById('rainBarDynamic');
+      const windText = document.getElementById('windStatusMsg');
+      if(windNeedle) windNeedle.style.transform = `rotate(${d.windDegree || 0}deg)`;
+      if(windNow) windNow.textContent = `${d.windSpeed || 0} km/h`;
+      if(windDir) windDir.textContent = d.windDir || '-';
+      if(windMax) windMax.textContent = `${d.windMax || 0} km/h`;
+      if(rainAmount) rainAmount.textContent = d.rainChance || 0;
+      if(rainBar) rainBar.style.height = `${Math.max(10, d.rainChance || 0)}%`;
+      if(windText){
+        const windy = (d.windSpeed || 0) > 20;
+        windText.className = windy ? 'text-xs text-orange-500 font-bold mt-2' : 'text-xs text-emerald-600 font-bold mt-2';
+        windText.innerHTML = windy ? '<i class="fa-solid fa-triangle-exclamation"></i> ลมพัดแรง' : '<i class="fa-solid fa-circle-check"></i> ลมพัดสบาย';
+      }
     }
 
     function renderAQI(){
@@ -490,7 +637,23 @@
     function switchUnit(unit){currentUnit=unit; document.querySelectorAll('.unit-btn').forEach(btn=>btn.classList.remove('bg-blue-600','text-white')); if(unit==='C'){['btnC','setBtnC'].forEach(id=>document.getElementById(id)?.classList.add('bg-blue-600','text-white'));}else{['btnF','setBtnF'].forEach(id=>document.getElementById(id)?.classList.add('bg-blue-600','text-white'));} renderAll(); renderTempChart(); if(currentView==='history')renderCompareChart();}
 
     function searchLocation(event){event.preventDefault(); const q=document.getElementById('searchInput').value.trim(); if(!q)return; searchLocationByName(q);}
-    async function searchLocationByName(q){try{showToast(`กำลังค้นหา ${q}...`); const res=await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q)}&limit=1&accept-language=th`); const data=await res.json(); if(!data.length)throw new Error('not found'); await fetchWeather(parseFloat(data[0].lat),parseFloat(data[0].lon),data[0].display_name.split(',').slice(0,2).join(',')); document.getElementById('searchInput').blur();}catch(e){showToast('ไม่พบสถานที่ที่ค้นหา','error');}}
+    async function searchLocationByName(q){
+      try{
+        showToast(`กำลังค้นหา ${q}...`);
+        const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(q)}&count=1&language=th&format=json`;
+        const res = await fetch(url);
+        if(!res.ok) throw new Error('geocoding failed');
+        const data = await res.json();
+        if(!data.results || !data.results.length) throw new Error('not found');
+        const place = data.results[0];
+        const label = [place.name, place.admin1, place.country].filter(Boolean).join(', ');
+        await fetchWeather(Number(place.latitude), Number(place.longitude), label);
+        document.getElementById('searchInput').blur();
+      }catch(e){
+        console.error(e);
+        showToast('ไม่พบสถานที่ที่ค้นหา','error');
+      }
+    }
     function resetRadarMap(){if(fullMap&&activeData){fullMap.setView(activeData.coords,10);showToast('กลับไปที่ศูนย์กลางแล้ว');}}
     async function shareWeather(){if(!activeData)return; const text=`สภาพอากาศที่ ${activeData.name}: ${activeData.condition}, ${activeData.temp}°C, ฝน ${activeData.rainChance}%, ลม ${activeData.windSpeed} km/h`; try{if(navigator.share){await navigator.share({title:'WeatherPro',text});return;} await navigator.clipboard.writeText(text); showToast('คัดลอกข้อมูลสภาพอากาศแล้ว');}catch(e){const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.left='-999px';document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();showToast('คัดลอกข้อมูลสภาพอากาศแล้ว');}}
   </script>
