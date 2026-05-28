@@ -612,29 +612,111 @@
     function renderAlerts(){const c=document.getElementById('alertContainer'); if(activeData.hasAlert)c.innerHTML=`<div class="bg-amber-50 border-l-4 border-amber-400 p-6 rounded-r-3xl flex gap-4"><i class="fa-solid fa-triangle-exclamation text-amber-500 text-3xl mt-1 shrink-0"></i><div><h3 class="font-extrabold text-lg text-amber-800">${activeData.alertTitle}</h3><p class="text-sm text-amber-700 mt-2">${activeData.alertDesc}</p></div></div>`; else c.innerHTML='<div class="bg-slate-50 border-l-4 border-slate-300 p-6 rounded-r-3xl flex gap-4"><i class="fa-solid fa-shield-check text-slate-400 text-3xl mt-1 shrink-0"></i><div><h3 class="font-extrabold text-lg text-slate-700">สภาวะอากาศปกติ</h3><p class="text-sm text-slate-500 mt-2">ยังไม่มีการแจ้งเตือนพายุหรือสภาพอากาศรุนแรงในพื้นที่</p></div></div>';}
 
     function initOrUpdateMaps(){
-      if(!window.L || !activeData) return;
+      if(!activeData) return;
+      const previewBox = document.getElementById('previewMap');
+      const fullBox = document.getElementById('fullscreenRadarMap');
+
+      if(!window.L){
+        const mapFallback = '<div class="w-full h-full flex items-center justify-center text-center text-sm text-slate-400 bg-slate-100 p-6">ไม่สามารถโหลดแผนที่ได้ กรุณาตรวจสอบอินเทอร์เน็ตหรือ CDN ของ Leaflet</div>';
+        if(previewBox) previewBox.innerHTML = mapFallback;
+        if(fullBox) fullBox.innerHTML = mapFallback;
+        return;
+      }
+
       const coords = activeData.coords;
-      if(!previewMap){previewMap=L.map('previewMap',{zoomControl:false,attributionControl:false}).setView(coords,10);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19}).addTo(previewMap);}else previewMap.setView(coords,10);
-      if(previewCircle) previewMap.removeLayer(previewCircle); previewCircle=L.circle(coords,{color:'#22c55e',fillColor:'#86efac',fillOpacity:.35,radius:12000}).addTo(previewMap); setTimeout(()=>previewMap.invalidateSize(),250);
-      if(!fullMap){fullMap=L.map('fullscreenRadarMap',{zoomControl:true}).setView(coords,10);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(fullMap);}else fullMap.setView(coords,10);
-      if(fullCircle) fullMap.removeLayer(fullCircle); fullCircle=L.circle(coords,{color:'#f43f5e',fillColor:'#fda4af',fillOpacity:.4,radius:18000}).addTo(fullMap); setTimeout(()=>fullMap.invalidateSize(),250);
+      if(!previewMap){
+        previewMap = L.map('previewMap',{zoomControl:false,attributionControl:false}).setView(coords,10);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19}).addTo(previewMap);
+      }else{
+        previewMap.setView(coords,10);
+      }
+      if(previewCircle) previewMap.removeLayer(previewCircle);
+      previewCircle = L.circle(coords,{color:'#22c55e',fillColor:'#86efac',fillOpacity:.35,radius:12000}).addTo(previewMap);
+      setTimeout(()=>previewMap.invalidateSize(),250);
+
+      if(!fullMap){
+        fullMap = L.map('fullscreenRadarMap',{zoomControl:true}).setView(coords,10);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(fullMap);
+      }else{
+        fullMap.setView(coords,10);
+      }
+      if(fullCircle) fullMap.removeLayer(fullCircle);
+      fullCircle = L.circle(coords,{color:'#f43f5e',fillColor:'#fda4af',fillOpacity:.4,radius:18000}).addTo(fullMap);
+      setTimeout(()=>fullMap.invalidateSize(),250);
     }
 
     function renderTempChart(){
-      if(!window.Chart || !activeData) return; const canvas=document.getElementById('tempTrendChart'); if(tempChart) tempChart.destroy();
-      tempChart=new Chart(canvas,{type:'line',data:{labels:activeData.daily.map(d=>d.day),datasets:[{label:'สูงสุด',data:activeData.daily.map(d=>toTemp(d.tempMax)),borderColor:'#f97316',backgroundColor:'rgba(249,115,22,.12)',fill:true,tension:.35},{label:'ต่ำสุด',data:activeData.daily.map(d=>toTemp(d.tempMin)),borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,.10)',fill:true,tension:.35}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{family:'Prompt'}}}},scales:{x:{ticks:{font:{family:'Prompt'}}},y:{ticks:{font:{family:'Prompt'}}}}}});
+      if(!activeData) return;
+      const canvas = document.getElementById('tempTrendChart');
+      if(!window.Chart || !canvas){
+        showChartFallback(canvas,'ไม่สามารถโหลดกราฟอุณหภูมิได้ กรุณาตรวจสอบอินเทอร์เน็ตหรือ CDN ของ Chart.js');
+        return;
+      }
+      if(tempChart) tempChart.destroy();
+      tempChart = new Chart(canvas,{
+        type:'line',
+        data:{
+          labels:activeData.daily.map(d=>d.day),
+          datasets:[
+            {label:'สูงสุด',data:activeData.daily.map(d=>toTemp(d.tempMax)),borderColor:'#f97316',backgroundColor:'rgba(249,115,22,.12)',fill:true,tension:.35},
+            {label:'ต่ำสุด',data:activeData.daily.map(d=>toTemp(d.tempMin)),borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,.10)',fill:true,tension:.35}
+          ]
+        },
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{family:'Prompt'}}}},scales:{x:{ticks:{font:{family:'Prompt'}}},y:{ticks:{font:{family:'Prompt'}}}}}
+      });
     }
 
     function renderCompareChart(){
-      if(!window.Chart || !activeData) return; const canvas=document.getElementById('historicalCompareChart'); if(compareChart) compareChart.destroy();
-      compareChart=new Chart(canvas,{type:'bar',data:{labels:activeData.hourly.slice(0,12).map(h=>h.time),datasets:[{label:'อุณหภูมิ',data:activeData.hourly.slice(0,12).map(h=>toTemp(h.temp)),backgroundColor:'rgba(59,130,246,.65)'},{label:'ลม',data:activeData.hourly.slice(0,12).map(h=>parseInt(h.wind)||0),backgroundColor:'rgba(16,185,129,.65)'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{family:'Prompt'}}}},scales:{x:{ticks:{font:{family:'Prompt'}}},y:{ticks:{font:{family:'Prompt'}}}}}});
+      if(!activeData) return;
+      const canvas = document.getElementById('historicalCompareChart');
+      if(!window.Chart || !canvas){
+        showChartFallback(canvas,'ไม่สามารถโหลดกราฟสถิติได้ กรุณาตรวจสอบอินเทอร์เน็ตหรือ CDN ของ Chart.js');
+        return;
+      }
+      if(compareChart) compareChart.destroy();
+      compareChart = new Chart(canvas,{
+        type:'bar',
+        data:{
+          labels:activeData.hourly.slice(0,12).map(h=>h.time),
+          datasets:[
+            {label:'อุณหภูมิ',data:activeData.hourly.slice(0,12).map(h=>toTemp(h.temp)),backgroundColor:'rgba(59,130,246,.65)'},
+            {label:'ลม',data:activeData.hourly.slice(0,12).map(h=>parseInt(h.wind)||0),backgroundColor:'rgba(16,185,129,.65)'}
+          ]
+        },
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{family:'Prompt'}}}},scales:{x:{ticks:{font:{family:'Prompt'}}},y:{ticks:{font:{family:'Prompt'}}}}}
+      });
+    }
+
+    function showChartFallback(canvas,message){
+      if(!canvas || !canvas.parentElement) return;
+      canvas.parentElement.innerHTML = `<div class="h-full min-h-[220px] flex items-center justify-center text-center text-sm text-slate-400 bg-slate-50 rounded-3xl p-6">${message}</div>`;
     }
 
     function switchView(view){
       currentView=view; document.querySelectorAll('.view-content').forEach(v=>v.classList.add('hidden')); const active=document.getElementById(`view-${view}`); if(active) active.classList.remove('hidden'); document.querySelectorAll('[data-view]').forEach(btn=>btn.classList.toggle('active',btn.dataset.view===view)); if(view==='radar'&&fullMap)setTimeout(()=>fullMap.invalidateSize(),180); if(view==='history')setTimeout(renderCompareChart,120); window.scrollTo({top:0,behavior:'smooth'});
     }
 
-    function switchUnit(unit){currentUnit=unit; document.querySelectorAll('.unit-btn').forEach(btn=>btn.classList.remove('bg-blue-600','text-white')); if(unit==='C'){['btnC','setBtnC'].forEach(id=>document.getElementById(id)?.classList.add('bg-blue-600','text-white'));}else{['btnF','setBtnF'].forEach(id=>document.getElementById(id)?.classList.add('bg-blue-600','text-white'));} renderAll(); renderTempChart(); if(currentView==='history')renderCompareChart();}
+    function switchUnit(unit){
+      currentUnit = unit;
+      setUnitButtonState('btnC', unit === 'C');
+      setUnitButtonState('btnF', unit === 'F');
+      setUnitButtonState('setBtnC', unit === 'C');
+      setUnitButtonState('setBtnF', unit === 'F');
+      renderAll();
+      renderTempChart();
+      if(currentView === 'history') renderCompareChart();
+    }
+
+    function setUnitButtonState(id,isActive){
+      const btn = document.getElementById(id);
+      if(!btn) return;
+      btn.classList.remove('bg-blue-600','text-white','text-slate-400','text-slate-500');
+      if(isActive){
+        btn.classList.add('bg-blue-600','text-white');
+      }else{
+        btn.classList.add(id.startsWith('set') ? 'text-slate-500' : 'text-slate-400');
+      }
+    }
 
     function searchLocation(event){event.preventDefault(); const q=document.getElementById('searchInput').value.trim(); if(!q)return; searchLocationByName(q);}
     async function searchLocationByName(q){
